@@ -1,0 +1,5106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>The Aircraft Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f4f1; --surface:#ffffff; --surface-2:#eef0ea; --ink:#121a24; --muted:#5b6b7d; --line:#dde1d8;
+    --navy:#0f2a44; --navy-2:#163a5e; --amber:#c47a12; --amber-bg:#fdf3e0; --green:#166534; --green-bg:#dcfce7; --project:#ffffff; --project-bg:#b91c1c; --auction:#ffffff; --auction-bg:#1d4ed8;
+    --blue-bg:#e8eef5; --radius:14px; --radius-lg:18px;
+    --shadow:0 1px 3px rgba(15,42,68,.08),0 8px 24px rgba(15,42,68,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0c1219; --surface:#151e2a; --surface-2:#1c2939; --ink:#eef2f6; --muted:#9aabbc; --line:#263446; --navy:#dbeafe; --navy-2:#bfdbfe; --amber:#f5b04a; --amber-bg:#2a2110; --green:#86efac; --green-bg:#14291c; --blue-bg:#1a2a3f; --project:#ffffff; --project-bg:#dc2626; --auction:#ffffff; --auction-bg:#2563eb; --shadow:0 1px 3px rgba(0,0,0,.4); }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45}
+  a{color:inherit}
+  button,[role="button"],select,input{font:inherit}
+  button,select,input[type="search"]{min-height:44px}
+  .wrap{max-width:1120px;margin:0 auto;padding:18px 16px 36px}
+  /* Top status */
+  .topbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .live{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600}
+  .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
+  .topmeta{font-size:13px;color:var(--muted)}
+  .topmeta strong{color:var(--ink)}
+  /* Hero strip - content, not branding */
+  .hero{background:var(--navy);color:#fff;border-radius:var(--radius-lg);padding:20px 20px 18px;position:relative;overflow:hidden}
+  @media (prefers-color-scheme: dark){ .hero{background:#132a44} }
+  .hero h1{font-family:"Barlow Condensed",sans-serif;font-size:42px;line-height:.95;letter-spacing:.02em;text-transform:uppercase;margin:0 0 8px;font-weight:700}
+  .hero h1 span{color:#f5b04a}
+  .hero p{margin:0;max-width:680px;color:#dbe6f2;font-size:15.5px;line-height:1.5}
+  .hero-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:18px}
+  @media(max-width:760px){.hero-grid{grid-template-columns:1fr}.hero h1{font-size:36px}}
+  .digest{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:14px}
+  .digest label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;font-weight:700}
+  .digest strong{display:block;font-size:18px;margin:4px 0 2px}
+  .digest p{font-size:13.5px;color:#dbe6f2;margin:0}
+  .digest .pill{display:inline-block;margin-top:10px;background:#f5b04a;color:#1a1200;font-weight:700;font-size:12.5px;padding:6px 10px;border-radius:999px}
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow)}
+  .kpi small{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .kpi b{display:block;font-size:28px;line-height:1;margin:6px 0 4px;font-weight:800;letter-spacing:-.02em}
+  .kpi span{font-size:13px;color:var(--muted)}
+  .kpi .mono{font-family:"IBM Plex Mono",monospace}
+  /* Toolbar */
+  .toolbar{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:var(--shadow)}
+  .search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:0 14px}
+  .search input{border:0;background:transparent;outline:none;width:100%;height:44px;color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:0 14px;min-height:40px;font-weight:600;cursor:pointer}
+  .chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  @media (prefers-color-scheme: dark){ .chip.active{background:#e8eef5;color:#0f2a44} }
+  select{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:0 12px;font-weight:600}
+  /* Coverage */
+  .coverage{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+  @media(max-width:760px){.coverage{grid-template-columns:1fr}}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+  .panel h3{margin:0 0 10px;font-size:15px}
+  .panel p{margin:0;color:var(--muted);font-size:14px}
+  .sources{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .sources li{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;background:var(--surface-2);border-radius:10px;font-size:14px}
+  .sources li b{font-weight:700}
+  .sources li span{color:var(--muted);white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+  .dedup{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .dedup span{font-size:12.5px;font-weight:600;background:var(--blue-bg);padding:6px 9px;border-radius:999px}
+  /* Groups */
+  .group{margin-top:22px}
+  .group-head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-bottom:10px}
+  .group-head h2{margin:0;font-family:"Barlow Condensed",sans-serif;font-size:28px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
+  .group-head h2 em{font-style:normal;color:var(--amber)}
+  .group-head p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+  .stats{display:flex;gap:8px;flex-wrap:wrap}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:92px}
+  .stat small{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .stat b{font-family:"IBM Plex Mono",monospace;font-size:15px}
+  .stat.avg{background:var(--amber-bg);border-color:transparent}
+  /* Cards */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media(max-width:760px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .year{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;background:var(--surface-2);border:1px solid var(--line);padding:4px 7px;border-radius:999px}
+  .source-badge{font-size:11.5px;font-weight:700;background:var(--green-bg);color:var(--green);padding:5px 8px;border-radius:999px;white-space:normal;text-align:right;line-height:1.25;max-width:58%}
+  .share-badge{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;background:var(--amber-bg);color:var(--amber);padding:5px 10px;border-radius:999px}
+  .project-badge{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:800;background:var(--project-bg);color:var(--project);padding:5px 10px;border-radius:999px;letter-spacing:.01em}
+  .project-badge .reason{font-weight:600;opacity:.92}
+  .auction-badge{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:800;background:var(--auction-bg);color:var(--auction);padding:5px 10px;border-radius:999px;letter-spacing:.01em}
+  .auction-badge .reason{font-weight:600;opacity:.92}
+  .card h3{margin:10px 0 2px;font-size:20px;line-height:1.1;letter-spacing:-.01em}
+  .loc{color:var(--muted);font-size:14px}
+  .price{margin:14px 0 12px;display:flex;align-items:baseline;gap:8px}
+  .price b{font-size:30px;letter-spacing:-.03em;line-height:1}
+  .price span{color:var(--muted);font-size:13px}
+  .specs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+  @media(max-width:480px){.specs{grid-template-columns:1fr 1fr 1fr;gap:6px}.spec{padding:8px 7px}.spec b.mono{font-size:12.5px}}
+  .spec{background:var(--surface-2);border-radius:10px;padding:10px}
+  .spec small{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .spec b{display:block;margin-top:3px;font-size:15px;line-height:1.2}
+  .spec b.mono{font-family:"IBM Plex Mono",monospace;font-size:14px}
+  .spec p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+  .notes{font-size:14px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin-top:auto}
+  .card-foot{display:flex;gap:8px;margin-top:12px}
+  .btn{flex:1;text-align:center;text-decoration:none;font-weight:700;border-radius:999px;padding:12px 14px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  .btn-primary{background:var(--navy);color:#fff}
+  @media (prefers-color-scheme: dark){ .btn-primary{background:#e8eef5;color:#0f2a44} }
+  .btn-ghost{border:1px solid var(--line);background:var(--surface);flex:0 0 auto;padding-inline:14px;cursor:pointer;color:var(--ink)}
+  .idline{margin-top:10px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .empty{display:none;background:var(--surface);border:1px dashed var(--line);border-radius:var(--radius);padding:22px;text-align:center;color:var(--muted)}
+  .empty.show{display:block}
+  .footnote{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  @media(max-width:760px){.footnote{grid-template-columns:1fr}}
+  .footnote h4{margin:0 0 6px;font-size:14px}
+  .footnote p{margin:0;font-size:13.5px;color:var(--muted)}
+  .sr{position:absolute;left:-9999px}
+  /* Newsletter */
+  .news{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow)}
+  .news-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+  @media(max-width:760px){.news-grid{grid-template-columns:1fr}}
+  .news h2{font-family:"Barlow Condensed",sans-serif;font-size:34px;text-transform:uppercase;letter-spacing:.02em;line-height:.95;margin:0 0 8px}
+  .news h2 em{font-style:normal;color:var(--amber)}
+  .news p{color:var(--muted);font-size:14.5px;margin:0 0 10px}
+  .signup{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .signup input{flex:1;min-width:200px;border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:0 16px;color:var(--ink)}
+  .signup button{background:var(--navy);color:#fff;border:0;border-radius:999px;padding:0 20px;font-weight:700;cursor:pointer}
+  @media (prefers-color-scheme: dark){ .signup button{background:#e8eef5;color:#0f2a44} }
+  .issue{background:var(--surface-2);border-radius:12px;padding:16px}
+  .issue h3{margin:0 0 4px;font-size:16px}
+  .issue small{color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:11px}
+  .issue ul{margin:10px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
+  .issue ul b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="live"><span class="dot"></span> Tracker active — deduplicated &amp; grouped</div>
+    <div class="topmeta">Updated <strong>Mon, Nov 16, 2026 · 290 listings</strong></div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <h1>Every piston aircraft.<br><span>One clean list.</span></h1>
+        <p>Single- and multi-engine pistons tracked across Facebook Marketplace and for-sale groups. Every entry here is a <strong style="color:#fff">brief synopsis in our own words</strong> that links out to the original listing for photos, full details, and seller contact.</p>
+      </div>
+      <div class="digest">
+        <label>The Aircraft Market — email</label>
+        <strong>Subscribe to stay informed</strong>
+        <p>Keep up to date with what planes are on the market, and the ones that have sold or left the market — everything in one place.</p>
+        <span class="pill">Free to subscribe</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="news" id="newsletter" aria-label="The Aircraft Market newsletter">
+    <div class="news-grid">
+      <div>
+        <h2>The Aircraft <em>Market</em></h2>
+        <p><strong style="color:var(--ink)">Keep up to date with what planes are on the market, and the ones that have sold or left the market — everything in one place.</strong> No hype: just the numbers from tracking the market every day, with a link out to the original source for anything you want to chase.</p>
+        <form class="signup" id="signupForm">
+          <label class="sr" for="signupEmail">Email address</label>
+          <input id="signupEmail" type="email" required placeholder="you@example.com" autocomplete="email">
+          <button type="submit">Subscribe →</button>
+        </form>
+        <p id="signupHelp" style="font-size:13px;margin-top:8px">This opens your email app with a pre-filled “subscribe” message — just press Send there. Nothing is subscribed until you send it.</p>
+      </div>
+      <aside class="issue" aria-label="Issue 1 preview">
+        <small>Preview · Issue #1 — from the Nov 16 scan</small>
+        <h3>What subscribers get</h3>
+        <ul>
+          <li><b>Snapshot:</b> 290 pistons tracked · $20,000–$1,699,900 · median $126,250 · average $184,677 · Cessna 124, Piper 81, Beechcraft 46</li>
+          <li><b>Deals to look at:</b> 1974 Piper Arrow — $45,000, St. Petersburg FL (cheapest of 11 Arrows tracked) · 1961 Mooney M20 — $59,999, just 10 SMOH · 2001 Cirrus SR22 — $189,995, under half the SR22 median</li>
+          <li><b>Model watch — Cessna 172:</b> 32 tracked, median $123,250, range $42,000–$314,900 — compare TT / SMOH side-by-side in the list below</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi"><small>Tracked listings</small><b id="kpiCount">290</b><span>Deduplicated across Marketplace &amp; groups</span></div>
+    <div class="kpi"><small>Priced listings</small><b>290 <span style="font-size:14px;font-weight:600;color:var(--muted)">of 290</span></b><span>All listings priced</span></div>
+    <div class="kpi"><small>Price range</small><b class="mono" style="font-size:20px;padding-top:4px">$20,000 – $1,699,900</b><span>Across 286 whole-aircraft listings</span></div>
+    <div class="kpi"><small>Average price</small><b class="mono" style="font-size:22px;padding-top:4px">$184,677</b><span>Mean of 286 whole aircraft · median $126,250</span></div>
+  </div>
+
+  <div class="toolbar" role="search">
+    <label class="search"><span aria-hidden="true">⌕</span><span class="sr">Search listings</span><input id="q" type="search" placeholder="Search model, location, title…" autocomplete="off"></label>
+    <div class="chips" id="chips">
+      <button class="chip active" data-filter="all">All makes · 290</button>
+      <button class="chip" data-filter="Cessna">Cessna · 124</button>
+      <button class="chip" data-filter="Piper">Piper · 81</button>
+      <button class="chip" data-filter="Beechcraft">Beechcraft · 46</button>
+      <button class="chip" data-filter="Cirrus">Cirrus · 18</button>
+      <button class="chip" data-filter="Mooney">Mooney · 10</button>
+      <button class="chip" data-filter="Vans">Vans · 4</button>
+      <button class="chip" data-filter="Diamond">Diamond · 2</button>
+      <button class="chip" data-filter="Rockwell">Rockwell · 2</button>
+      <button class="chip" data-filter="Grumman">Grumman · 2</button>
+      <button class="chip" data-filter="Luscombe">Luscombe · 1</button>
+      <button class="chip" data-filter="priced">Priced only</button>
+    </div>
+    <div class="chips" id="sourceChips" aria-label="Filter by source">
+      <button class="chip active" data-source="all">All sources</button>
+      <button class="chip" data-source="facebook">Facebook groups</button>
+      <button class="chip" data-source="marketplace">FB Marketplace</button>
+      <button class="chip" data-source="tap">Trade-A-Plane</button>
+      <button class="chip" data-source="controller">Controller</button>
+      <button class="chip" data-source="barnstormers">Barnstormers</button>
+      <button class="chip" data-source="globalair">GlobalAir</button>
+    </div>
+    <label class="sr" for="sort">Sort</label>
+    <select id="sort">
+      <option value="group">Grouped by model</option>
+      <option value="priceAsc">Price: low to high</option>
+      <option value="priceDesc">Price: high to low</option>
+      <option value="smohAsc">Engine: lowest SMOH first</option>
+      <option value="stohAsc">Engine: lowest STOH first</option>
+      <option value="newest">Newest listed first</option>
+    </select>
+  </div>
+
+  <div class="coverage">
+    <div class="panel">
+      <h3>Where this looks</h3>
+      <ul class="sources">
+        <li><b>Facebook Marketplace</b><span>194 LISTINGS</span></li>
+        <li><b>Facebook groups — 17 for-sale groups</b><span>96 LISTINGS</span></li>
+        <li><b>Trade-A-Plane</b><span>—</span></li>
+        <li><b>Controller.com</b><span>—</span></li>
+        <li><b>Barnstormers</b><span>—</span></li>
+        <li><b>GlobalAir</b><span>—</span></li>
+      </ul>
+      <p style="margin-top:10px">All 290 listings currently come from Facebook — 194 from Marketplace and 96 from groups, led by AIRCRAFT FOR SALE or BUY (55), Aircraft Marketplace (16), and Planes for sale (8).</p>
+    </div>
+  </div>
+
+  <p style="margin:22px 0 0;color:var(--muted);font-size:13.5px"><strong style="color:var(--ink)">How to read the list below:</strong> each card is a short synopsis — year, model, asking price, TT / SMOH / STOH, and location — with a button to the <strong style="color:var(--ink)">original listing</strong> for photos, full description, and seller contact. Source is shown on every card.</p>
+
+  <div id="groups"></div>
+  <div id="empty" class="empty"><strong style="color:var(--ink)">No listings match that filter.</strong><br>Try clearing the search or picking “All makes”.</div>
+
+  <div class="footnote">
+    <div><h4>One pane of glass</h4><p>Marketplace and group listings gathered into one list — deduplicated, grouped by model, with high / low / average for each. Each entry links to the original source so you can message the seller directly.</p></div>
+    <div><h4>Brief facts here, details at the source</h4><p>Each card carries the key facts — price, hours, location. Photos, the full description, and seller contact live at the original listing.</p></div>
+    <div><h4>Stats per model</h4><p>High / low / average update as more listings for that model appear. With one listing, all three are the same — that’s expected.</p></div>
+  </div>
+  <p style="text-align:center;color:var(--muted);font-size:12.5px;margin:18px 0 0">Prices and hours are as listed by sellers at the original source. Always verify logbooks, annual status, and title before buying, and get an independent pre-buy inspection.</p>
+</div>
+
+<script>
+const LISTINGS = [
+ {
+  "id": "4758602757752488",
+  "year": 2006,
+  "make": "Cessna",
+  "model": "182T",
+  "price": 449000,
+  "location": "West Palm Beach, FL",
+  "totalTime": 1060.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/4758602757752488",
+  "source": "Marketplace",
+  "listed": "Nov 16, 2026",
+  "dateRaw": "2026-11-16",
+  "title": "2006 Cessna 182T"
+ },
+ {
+  "id": "1447265490805622",
+  "year": 1968,
+  "make": "Piper",
+  "model": "Cherokee 180",
+  "price": 32500,
+  "location": "Portland, TN",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1447265490805622",
+  "source": "Marketplace",
+  "listed": "Nov 16, 2026",
+  "dateRaw": "2026-11-16",
+  "title": "1/4 Share, 1968 Piper Cherokee 180 (N6354J), Portland, TN (1M5)",
+  "listingType": "share",
+  "shareFraction": "1/4"
+ },
+ {
+  "id": "1142433508706424",
+  "year": 1978,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 165000,
+  "location": "Potsdam, NY",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1142433508706424",
+  "source": "Marketplace",
+  "listed": "Nov 16, 2026",
+  "dateRaw": "2026-11-16",
+  "title": "1978 Cessna 172N"
+ },
+ {
+  "id": "1594218632472992",
+  "year": 1976,
+  "make": "Cessna",
+  "model": "172M",
+  "price": 127500,
+  "location": "Minneapolis, MN",
+  "totalTime": 2826.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1594218632472992",
+  "source": "Marketplace",
+  "listed": "Nov 16, 2026",
+  "dateRaw": "2026-11-16",
+  "title": "1976 Cessna 172M Skyhawk"
+ },
+ {
+  "id": "2774730556262758",
+  "year": 2008,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 409900,
+  "location": "Location not listed",
+  "totalTime": 3400.0,
+  "smoh": 2000.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/264065583995947/permalink/2774730556262758/?sale_post_id=2774730556262758",
+  "source": "General Aviation Buy/Sell/Trade",
+  "listed": "Nov 16, 2026",
+  "dateRaw": "2026-11-16",
+  "title": "2008 Cirrus SR22 Turbo"
+ },
+ {
+  "id": "1137064559031928",
+  "year": 2016,
+  "make": "Cirrus",
+  "model": "SR20",
+  "price": 409900,
+  "location": "Phoenix, AZ",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1137064559031928",
+  "source": "Marketplace",
+  "listed": "Nov 16, 2026",
+  "dateRaw": "2026-11-16",
+  "title": "2016 Cirrus SR20-G3"
+ },
+ {
+  "id": "946031998590701",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "150H",
+  "price": 69900,
+  "location": "Alva, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/946031998590701",
+  "source": "Marketplace",
+  "listed": "Nov 16, 2026",
+  "dateRaw": "2026-11-16",
+  "title": "1967 Cessna  150H"
+ },
+ {
+  "id": "1073219592446630",
+  "year": 1976,
+  "make": "Cessna",
+  "model": "T210L",
+  "price": 169500,
+  "location": "Las Vegas, NV",
+  "totalTime": null,
+  "smoh": 893.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1073219592446630",
+  "source": "Marketplace",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "1976 Cessna T210L Turbo Centurion II"
+ },
+ {
+  "id": "4401316010085116",
+  "year": 1980,
+  "make": "Cessna",
+  "model": "206",
+  "price": 200000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1824473054436104/permalink/4401316010085116/?sale_post_id=4401316010085116",
+  "source": "Aviation Buy, Sell, and Trade",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "1980 Cessna 206"
+ },
+ {
+  "id": "1124452627233260",
+  "year": 1974,
+  "make": "Piper",
+  "model": "PA-28-150",
+  "price": 89000,
+  "location": "St Petersburg, FL",
+  "totalTime": null,
+  "smoh": 1023.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1124452627233260",
+  "source": "Marketplace",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "1974 Piper Warrior"
+ },
+ {
+  "id": "1462539286019808",
+  "year": 1977,
+  "make": "Mooney",
+  "model": "M20C",
+  "price": 85000,
+  "location": "Murfreesboro, TN",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1462539286019808",
+  "source": "Marketplace",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "1977 Mooney M20C"
+ },
+ {
+  "id": "1437765601295555",
+  "year": null,
+  "make": "Piper",
+  "model": "Cub",
+  "price": 78000,
+  "location": "Wolfeboro, NH",
+  "totalTime": 1805.0,
+  "smoh": 127.5,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1437765601295555",
+  "source": "Marketplace",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "Piper Cub Special PA-11 C85 stroker restored, fresh annual"
+ },
+ {
+  "id": "2951326051897087",
+  "year": 1970,
+  "make": "Cessna",
+  "model": "172L",
+  "price": 99500,
+  "location": "Location not listed",
+  "totalTime": 10958.0,
+  "smoh": null,
+  "stoh": 20.0,
+  "url": "https://facebook.com/groups/222297818133271/permalink/2951326051897087/?sale_post_id=2951326051897087",
+  "source": "Airplanes for Sale",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "1970 Cessna 172L"
+ },
+ {
+  "id": "1881800346122685",
+  "year": 1978,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 129000,
+  "location": "Houston, TX",
+  "totalTime": 1500.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1881800346122685",
+  "source": "Marketplace",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "1978 Cessna 172N"
+ },
+ {
+  "id": "1140571635373437",
+  "year": 2019,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 689000,
+  "location": "Gainesville, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1140571635373437",
+  "source": "Marketplace",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "2019 Cirrus SR22T G6 GTX Carbon"
+ },
+ {
+  "id": "1454329136070385",
+  "year": null,
+  "make": "Cessna",
+  "model": "182",
+  "price": 135000,
+  "location": "Peachtree Corners, GA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1454329136070385",
+  "source": "Marketplace",
+  "listed": "Nov 15, 2026",
+  "dateRaw": "2026-11-15",
+  "title": "Cessna 182"
+ },
+ {
+  "id": "5119152988312206",
+  "year": 1979,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 90000,
+  "location": "Pittsburgh, Pennsylvania",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1875047182722819/permalink/5119152988312206/",
+  "source": "Airplanes Buy, Sell",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "✈️ LIVE NOW: 1979 Cessna 172N Skyhawk, N6537F",
+  "isAuction": true
+ },
+ {
+  "id": "1109131935356385",
+  "year": 1946,
+  "make": "Cessna",
+  "model": "140",
+  "price": 35000,
+  "location": "River Falls, WI",
+  "totalTime": 140.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1109131935356385",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1946 Cessna 140"
+ },
+ {
+  "id": "5119073718320133",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "177",
+  "price": 54000,
+  "location": "Liverpool, Texas",
+  "totalTime": null,
+  "smoh": 526.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1875047182722819/permalink/5119073718320133/",
+  "source": "Airplanes Buy, Sell",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "✈️ LIVE NOW: 1967 Cessna 177 Cardinal, N29221",
+  "isAuction": true
+ },
+ {
+  "id": "5119002618327243",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "182Q",
+  "price": 82000,
+  "location": "Hunter, Kansas",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1875047182722819/permalink/5119002618327243/",
+  "source": "Airplanes Buy, Sell",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "✈️ LIVE NOW: 1977 Cessna 182Q Skylane, N735JN",
+  "isAuction": true,
+  "auctionEnds": "Wed, Nov 18 at 1 PM Central"
+ },
+ {
+  "id": "2306314336831103",
+  "year": 1963,
+  "make": "Cessna",
+  "model": "150C",
+  "price": 39500,
+  "location": "Lewiston, ID",
+  "totalTime": 6020.0,
+  "smoh": 1509.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2306314336831103",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1963 Cessna 150C"
+ },
+ {
+  "id": "40378587331754492",
+  "year": null,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 309900,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/824239537616096/permalink/40378587331754492/",
+  "source": "Aviation-Buy, Sell and Trade (The ORIGINAL)",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "New Cirrus SR22-G3 Turbo Normalized listing! Asking $309,900. Call Max Wiltchik with Pinnacle Aviation at (480)-686-2478"
+ },
+ {
+  "id": "4723093914601891",
+  "year": 1946,
+  "make": "Cessna",
+  "model": "140",
+  "price": 40000,
+  "location": "Kelso, WA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": 1125.3,
+  "url": "https://www.facebook.com/marketplace/item/4723093914601891",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1946 Cessna 140"
+ },
+ {
+  "id": "1511159637521633",
+  "year": 1967,
+  "make": "Piper",
+  "model": "Cherokee 180",
+  "price": 125000,
+  "location": "Albany, NY",
+  "totalTime": 7060.0,
+  "smoh": 1586.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1511159637521633",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1967 Piper Cherokee 180 D"
+ },
+ {
+  "id": "4781250015494935",
+  "year": 1962,
+  "make": "Cessna",
+  "model": "182E",
+  "price": 149000,
+  "location": "Greenwood, SC",
+  "totalTime": 6682.0,
+  "smoh": 61.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/4781250015494935",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1962 Cessna 182E"
+ },
+ {
+  "id": "29275639082088994",
+  "year": 2003,
+  "make": "Piper",
+  "model": "6X",
+  "price": 445000,
+  "location": "New Haven, CT",
+  "totalTime": 1010.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29275639082088994/?sale_post_id=29275639082088994",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "2003 Piper 6X N954TC"
+ },
+ {
+  "id": "2362400724531377",
+  "year": null,
+  "make": "Piper",
+  "model": "Saratoga",
+  "price": 40000,
+  "location": "Harleysville, PA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2362400724531377",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "Piper Saratoga 1/6 Share Based Pennridge Airport",
+  "listingType": "share",
+  "shareFraction": "1/6"
+ },
+ {
+  "id": "29274704318849137",
+  "year": 1966,
+  "make": "Mooney",
+  "model": "M20E",
+  "price": 57000,
+  "location": "Troutdale, OR",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29274704318849137/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1966 Mooney M20E Super 21, N9228M – $57,000"
+ },
+ {
+  "id": "2113798342576466",
+  "year": 1982,
+  "make": "Cessna",
+  "model": "414A",
+  "price": 489000,
+  "location": "Hickory, NC",
+  "totalTime": 5100.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2113798342576466",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1982 Cessna 414aw  ram vii"
+ },
+ {
+  "id": "29274142835571952",
+  "year": 1968,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 149900,
+  "location": "Springdale, Arkansas",
+  "totalTime": 7562.0,
+  "smoh": 1437.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29274142835571952/?sale_post_id=29274142835571952",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1968 Beechcraft 36 Bonanza (Six seats)"
+ },
+ {
+  "id": "29273638235622412",
+  "year": 1966,
+  "make": "Beechcraft",
+  "model": "Musketeer",
+  "price": 60000,
+  "location": "Cabot, AR",
+  "totalTime": 2971.0,
+  "smoh": 1046.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29273638235622412/?sale_post_id=29273638235622412",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1966 Beechcraft musketeer"
+ },
+ {
+  "id": "29412687038369081",
+  "year": 1959,
+  "make": "Cessna",
+  "model": "182B",
+  "price": 127500,
+  "location": "Clemson, SC",
+  "totalTime": 3486.1,
+  "smoh": 755.2,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/29412687038369081",
+  "source": "Marketplace",
+  "listed": "Nov 14, 2026",
+  "dateRaw": "2026-11-14",
+  "title": "1959 Cessna 182b"
+ },
+ {
+  "id": "29268752559444313",
+  "year": 2007,
+  "make": "Cessna",
+  "model": "T206H",
+  "price": 589000,
+  "location": "Location not listed",
+  "totalTime": 2132.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29268752559444313/?sale_post_id=29268752559444313",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "2007 Cessna  T206H"
+ },
+ {
+  "id": "29267788056207430",
+  "year": 1972,
+  "make": "Piper",
+  "model": "Seneca",
+  "price": 123456,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29267788056207430/?sale_post_id=29267788056207430",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1972 PIPER SENECA I"
+ },
+ {
+  "id": "29267425249577044",
+  "year": 2004,
+  "make": "Cessna",
+  "model": "172S",
+  "price": 220000,
+  "location": "Phoenix, AZ",
+  "totalTime": 9800.0,
+  "smoh": 2400.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29267425249577044/?sale_post_id=29267425249577044",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "2004 Cessna 172s"
+ },
+ {
+  "id": "1798901141381706",
+  "year": 1962,
+  "make": "Cessna",
+  "model": "182E",
+  "price": 179000,
+  "location": "Decatur, TX",
+  "totalTime": 4942.0,
+  "smoh": 960.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1798901141381706",
+  "source": "Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1962 Cessna 182e"
+ },
+ {
+  "id": "29266118029707766",
+  "year": 1969,
+  "make": "Cessna",
+  "model": "150",
+  "price": 55000,
+  "location": "Location not listed",
+  "totalTime": 7800.0,
+  "smoh": 544.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29266118029707766/?sale_post_id=29266118029707766",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1969 Cessna 150 k"
+ },
+ {
+  "id": "1628814722348323",
+  "year": 1964,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 175000,
+  "location": "Fairfield, CA",
+  "totalTime": null,
+  "smoh": 715.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1628814722348323",
+  "source": "Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1964 BEECHCRAFT 35 BONANZA"
+ },
+ {
+  "id": "2423951395122432",
+  "year": null,
+  "make": "Piper",
+  "model": "Saratoga",
+  "price": 525000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2423951395122432/",
+  "source": "Aircraft Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "Piper Saratoga II TC -  $525,000"
+ },
+ {
+  "id": "3062838410715828",
+  "year": 1978,
+  "make": "Piper",
+  "model": "Pa-32",
+  "price": 260000,
+  "location": "Clearwater, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3062838410715828",
+  "source": "Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "Fly Away in This Beautiful 1978 Piper PA-32 Lance Airplane"
+ },
+ {
+  "id": "2948633295499696",
+  "year": 1959,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 104500,
+  "location": "Location not listed",
+  "totalTime": 4715.0,
+  "smoh": 338.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/222297818133271/permalink/2948633295499696/?sale_post_id=2948633295499696",
+  "source": "Airplanes for Sale",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1959 Beechcraft M35 Bonanza. Immaculate machine with current Annual - Financing Available"
+ },
+ {
+  "id": "29262719603380942",
+  "year": 1975,
+  "make": "Cessna",
+  "model": "A185F",
+  "price": 499000,
+  "location": "Con Visalia, CA",
+  "totalTime": 4145.0,
+  "smoh": 7.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29262719603380942/?sale_post_id=29262719603380942",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1975 Cessna A185F on Aerocet Amphibs"
+ },
+ {
+  "id": "29262283906757845",
+  "year": 1978,
+  "make": "Mooney",
+  "model": "M20J",
+  "price": 113400,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29262283906757845/?sale_post_id=29262283906757845",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1978 Mooney  M20J"
+ },
+ {
+  "id": "29262154756770760",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "150",
+  "price": 58500,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29262154756770760/?sale_post_id=29262154756770760",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1967 Cessna 150"
+ },
+ {
+  "id": "29261819150137654",
+  "year": 1968,
+  "make": "Rockwell",
+  "model": "Commander 180",
+  "price": 69500,
+  "location": "Hesperia, CA",
+  "totalTime": 1578.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29261819150137654/?sale_post_id=29261819150137654",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1968 AERO Commander lark 180"
+ },
+ {
+  "id": "1838201913893358",
+  "year": null,
+  "make": "Beechcraft",
+  "model": "Baron",
+  "price": 300000,
+  "location": "Gilmer, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1838201913893358",
+  "source": "Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "Beechcraft 58TC"
+ },
+ {
+  "id": "1593338659142613",
+  "year": 1967,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 100000,
+  "location": "Gilmer, TX",
+  "totalTime": 1973.0,
+  "smoh": 1973.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1593338659142613",
+  "source": "Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "Piper Arrow"
+ },
+ {
+  "id": "5117100631850775",
+  "year": 1957,
+  "make": "Cessna",
+  "model": "182A",
+  "price": 159672,
+  "location": "Clemson, SC",
+  "totalTime": 3044.0,
+  "smoh": 79.8,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1875047182722819/permalink/5117100631850775/",
+  "source": "Airplanes Buy, Sell",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "For Sale: 1957 Cessna 182A"
+ },
+ {
+  "id": "1499352628958129",
+  "year": 1946,
+  "make": "Piper",
+  "model": "J3C-65",
+  "price": 29000,
+  "location": "New Castle, IN",
+  "totalTime": 2839.0,
+  "smoh": 648.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1499352628958129",
+  "source": "Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1946 Piper J3C-65"
+ },
+ {
+  "id": "29258918603761042",
+  "year": null,
+  "make": "Piper",
+  "model": "Cherokee 180",
+  "price": 99000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": 1488.5,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29258918603761042/?sale_post_id=29258918603761042",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "Piper PA28-180"
+ },
+ {
+  "id": "1428443579447470",
+  "year": 1946,
+  "make": "Luscombe",
+  "model": "8A",
+  "price": 37000,
+  "location": "High Ridge, MO",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1428443579447470",
+  "source": "Marketplace",
+  "listed": "Nov 13, 2026",
+  "dateRaw": "2026-11-13",
+  "title": "1946 Luscombe 8A Airplane"
+ },
+ {
+  "id": "29253080167678219",
+  "year": 1966,
+  "make": "Beechcraft",
+  "model": "Debonair",
+  "price": 175000,
+  "location": "Arlington, WA",
+  "totalTime": 5730.7,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29253080167678219/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1966 Beechcraft 35-C33A Debonair N9475S"
+ },
+ {
+  "id": "29251915564461346",
+  "year": 1977,
+  "make": "Piper",
+  "model": "PA-31-350 Navajo Chieftain",
+  "price": 249000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29251915564461346/?sale_post_id=29251915564461346",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1977 Piper PA-31-350 Navajo Chieftain"
+ },
+ {
+  "id": "29251712411148328",
+  "year": 1969,
+  "make": "Piper",
+  "model": "PA-28R",
+  "price": 98000,
+  "location": "New Buffalo, MI",
+  "totalTime": null,
+  "smoh": 703.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29251712411148328/?sale_post_id=29251712411148328",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "Piper PA-28R Arrow Aircraft"
+ },
+ {
+  "id": "1151922187225441",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "182K",
+  "price": 150000,
+  "location": "Flowery Branch, GA",
+  "totalTime": 7880.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1151922187225441",
+  "source": "Marketplace",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1967 Cessna 182k"
+ },
+ {
+  "id": "1174928418455537",
+  "year": 1979,
+  "make": "Piper",
+  "model": "Warrior",
+  "price": 92000,
+  "location": "La Porte, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1174928418455537",
+  "source": "Marketplace",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1979 Piper Warrior II"
+ },
+ {
+  "id": "29248895138096722",
+  "year": 2019,
+  "make": "Vans",
+  "model": "RV-8",
+  "price": 229000,
+  "location": "Petaluma, CA",
+  "totalTime": 320.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29248895138096722/?sale_post_id=29248895138096722",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "2019 RV-8"
+ },
+ {
+  "id": "29248871194765783",
+  "year": 1968,
+  "make": "Cessna",
+  "model": "150H",
+  "price": 45000,
+  "location": "Broad Brook, CT",
+  "totalTime": 4123.0,
+  "smoh": 1234.1,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29248871194765783/?sale_post_id=29248871194765783",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1968 Cessna C-150H Airplane Low TT"
+ },
+ {
+  "id": "1467014262070364",
+  "year": 1953,
+  "make": "Piper",
+  "model": "Tripacer",
+  "price": 38000,
+  "location": "Sloughhouse, CA",
+  "totalTime": 1192.0,
+  "smoh": 110.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1467014262070364",
+  "source": "Marketplace",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1953 Tripacer"
+ },
+ {
+  "id": "1679388813783528",
+  "year": 2016,
+  "make": "Vans",
+  "model": "RV-14",
+  "price": 340000,
+  "location": "Baker, Florida",
+  "totalTime": 1050.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/aircraft1/permalink/1679388813783528/",
+  "source": "Aircraft Sale and Trade",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "FOR SALE: 2016 Van's RV-14 – $340,000 (negotiable)"
+ },
+ {
+  "id": "29247120864940816",
+  "year": 1968,
+  "make": "Piper",
+  "model": "Cherokee 140",
+  "price": 66500,
+  "location": "Location not listed",
+  "totalTime": 6694.1,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29247120864940816/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "FOR SALE  1968 Piper Cherokee 140  PA-28 (150 Hp)"
+ },
+ {
+  "id": "1597562041666260",
+  "year": 1974,
+  "make": "Piper",
+  "model": "PA-28-151/160",
+  "price": 79000,
+  "location": "Hartsville, SC",
+  "totalTime": 2850.0,
+  "smoh": null,
+  "stoh": 705.0,
+  "url": "https://www.facebook.com/marketplace/item/1597562041666260",
+  "source": "Marketplace",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1974 Piper pa-28-151/160"
+ },
+ {
+  "id": "1040727575734018",
+  "year": 1962,
+  "make": "Piper",
+  "model": "Comanche",
+  "price": 90000,
+  "location": "Wallkill, NY",
+  "totalTime": 10181.0,
+  "smoh": 2454.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1040727575734018",
+  "source": "Marketplace",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1962 Piper comanche 250"
+ },
+ {
+  "id": "2947193722310320",
+  "year": 1968,
+  "make": "Piper",
+  "model": "PA28R180",
+  "price": 94000,
+  "location": "Tempe, AZ",
+  "totalTime": 3447.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/222297818133271/permalink/2947193722310320/?sale_post_id=2947193722310320",
+  "source": "Airplanes for Sale",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1968 Piper PA28R180"
+ },
+ {
+  "id": "1004251022731532",
+  "year": 1966,
+  "make": "Piper",
+  "model": "Cherokee 180",
+  "price": 110000,
+  "location": "Winter Haven, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1004251022731532",
+  "source": "Marketplace",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "1966 Piper Cherokee 180 IFR, NDH, Fresh Annual, KGIF"
+ },
+ {
+  "id": "1115639624436267",
+  "year": null,
+  "make": "Diamond",
+  "model": "DA40",
+  "price": 46500,
+  "location": "Gaffney, SC",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1115639624436267",
+  "source": "Marketplace",
+  "listed": "Nov 12, 2026",
+  "dateRaw": "2026-11-12",
+  "title": "Diamond DA-40"
+ },
+ {
+  "id": "2560602414447741",
+  "year": 1977,
+  "make": "Beechcraft",
+  "model": "Baron",
+  "price": 199900,
+  "location": "Columbiana, AL",
+  "totalTime": 2770.0,
+  "smoh": 969.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2560602414447741",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1977 BEECHCRAFT 58 BARON"
+ },
+ {
+  "id": "1110394881812631",
+  "year": 1973,
+  "make": "Cessna",
+  "model": "421B",
+  "price": 299000,
+  "location": "Tuscaloosa, AL",
+  "totalTime": 7893.0,
+  "smoh": 564.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1110394881812631",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1973 CESSNA 421B"
+ },
+ {
+  "id": "29238123845840518",
+  "year": 2004,
+  "make": "Piper",
+  "model": "Archer",
+  "price": 179000,
+  "location": "Norman, OK",
+  "totalTime": 11257.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29238123845840518/?sale_post_id=29238123845840518",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "2004 Piper archer iii pa-28-181 - ifr, gns 430w, ads-b in/out"
+ },
+ {
+  "id": "29237855649200671",
+  "year": 1978,
+  "make": "Cessna",
+  "model": "152",
+  "price": 74900,
+  "location": "Ellijay, Georgia",
+  "totalTime": 3492.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29237855649200671/?sale_post_id=29237855649200671",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1978 CESSNA 152 AIRPLANE, IFR, GARMIN GTN 650"
+ },
+ {
+  "id": "1453411026217323",
+  "year": 1979,
+  "make": "Cessna",
+  "model": "TR182",
+  "price": 269000,
+  "location": "Hoover, AL",
+  "totalTime": 4150.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1453411026217323",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1979 CESSNA TR182 (turbo-normalized)"
+ },
+ {
+  "id": "1772106904507079",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "414",
+  "price": 129500,
+  "location": "Stuart, FL",
+  "totalTime": 4777.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1772106904507079",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1977 Cessna 414"
+ },
+ {
+  "id": "2118624692192600",
+  "year": 1973,
+  "make": "Grumman",
+  "model": "AA-5",
+  "price": 92000,
+  "location": "Iona, ID",
+  "totalTime": 4059.9,
+  "smoh": 796.7,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2118624692192600",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1973 Grumman AA-5 Traveler - Fresh Annual, 430W, ADS-B"
+ },
+ {
+  "id": "1131344709633641",
+  "year": 1981,
+  "make": "Piper",
+  "model": "Aerostar",
+  "price": 135000,
+  "location": "Pembroke Pines, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1131344709633641",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1981 Piper AEROSTAR 600A Aerosrat 600A"
+ },
+ {
+  "id": "1677407764057821",
+  "year": 1967,
+  "make": "Beechcraft",
+  "model": "Debonair",
+  "price": 169000,
+  "location": "Salem, OR",
+  "totalTime": 1544.3,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1677407764057821",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1967 Beachcraft 350-CC3A Debonair 285"
+ },
+ {
+  "id": "2120807032137426",
+  "year": 1976,
+  "make": "Piper",
+  "model": "PA28",
+  "price": 60000,
+  "location": "Purcell, OK",
+  "totalTime": 4108.73,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2120807032137426",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1976 PIPER PA28 140"
+ },
+ {
+  "id": "2865703893816066",
+  "year": 1975,
+  "make": "Cessna",
+  "model": "150",
+  "price": 45000,
+  "location": "Greenwood, IN",
+  "totalTime": null,
+  "smoh": 1714.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2865703893816066",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1975 Cessna 150"
+ },
+ {
+  "id": "4131847320284500",
+  "year": 1973,
+  "make": "Cessna",
+  "model": "A188B",
+  "price": 70000,
+  "location": "Wichita, KS",
+  "totalTime": 6530.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/4131847320284500",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1973 Cessna A188B"
+ },
+ {
+  "id": "1115613704721109",
+  "year": 2023,
+  "make": "Cirrus",
+  "model": "SR20",
+  "price": 499900,
+  "location": "Kenosha, WI",
+  "totalTime": 470.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1115613704721109",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "2023 Cirrus SR20"
+ },
+ {
+  "id": "1500984318762323",
+  "year": 1984,
+  "make": "Cessna",
+  "model": "182R",
+  "price": 174950,
+  "location": "Minneapolis, MN",
+  "totalTime": 6095.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1500984318762323",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1984 Cessna 182R Skylane"
+ },
+ {
+  "id": "1849680446219410",
+  "year": 2013,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 599000,
+  "location": "Moscow, TN",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1849680446219410",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "2013 Cirrus sr22t"
+ },
+ {
+  "id": "1499076072146553",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "152",
+  "price": 79000,
+  "location": "Latrobe, PA",
+  "totalTime": 7974.0,
+  "smoh": 12.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1499076072146553",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1977 Cessna 152"
+ },
+ {
+  "id": "1867383608016092",
+  "year": 1969,
+  "make": "Cessna",
+  "model": "150J",
+  "price": 60000,
+  "location": "Chico, CA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1867383608016092",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "Cessna 150J"
+ },
+ {
+  "id": "1635641981633776",
+  "year": 1975,
+  "make": "Cessna",
+  "model": "340A",
+  "price": 395000,
+  "location": "Gold Beach, OR",
+  "totalTime": 6514.0,
+  "smoh": 693.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1635641981633776",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1975 Cessna 340A"
+ },
+ {
+  "id": "1593142512860202",
+  "year": 1973,
+  "make": "Beechcraft",
+  "model": "Baron",
+  "price": 275000,
+  "location": "Oxnard, CA",
+  "totalTime": null,
+  "smoh": 2026.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1593142512860202",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1973 Beechcraft B55 Baron "
+ },
+ {
+  "id": "1707619580696975",
+  "year": 1964,
+  "make": "Piper",
+  "model": "Cherokee",
+  "price": 74950,
+  "location": "Holmes, NY",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1707619580696975",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1964 Piper Cherokee pa28-140/160"
+ },
+ {
+  "id": "1154596900618334",
+  "year": 1988,
+  "make": "Mooney",
+  "model": "M20K",
+  "price": 219900,
+  "location": "Waukesha, WI",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1154596900618334",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1988 Mooney m20k / 252 se"
+ },
+ {
+  "id": "2589957661512984",
+  "year": 1974,
+  "make": "Cessna",
+  "model": "185",
+  "price": 188000,
+  "location": "Moses Lake, WA",
+  "totalTime": 4400.0,
+  "smoh": 1300.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2589957661512984",
+  "source": "Marketplace",
+  "listed": "Nov 11, 2026",
+  "dateRaw": "2026-11-11",
+  "title": "1974 Cessna 185"
+ },
+ {
+  "id": "1178234561219506",
+  "year": 1973,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 259900,
+  "location": "Troy, MI",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1178234561219506",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1973 Beechcraft Bonanza A36"
+ },
+ {
+  "id": "1714844523398644",
+  "year": 1975,
+  "make": "Cessna",
+  "model": "182P",
+  "price": 149000,
+  "location": "Bartlett, IL",
+  "totalTime": 5435.0,
+  "smoh": 1437.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1714844523398644",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1975 CESSNA 182P SKYLANE"
+ },
+ {
+  "id": "2681678305597010",
+  "year": 1958,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 167900,
+  "location": "Bartlett, IL",
+  "totalTime": 4306.0,
+  "smoh": 294.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2681678305597010",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1958 BEECHCRAFT 35 BONANZA"
+ },
+ {
+  "id": "1463271056021717",
+  "year": 2004,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 409900,
+  "location": "Roswell, GA",
+  "totalTime": null,
+  "smoh": 391.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1463271056021717",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "2004 Cirrus Sr-22"
+ },
+ {
+  "id": "1105349379001303",
+  "year": 1971,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 149000,
+  "location": "Bartlett, IL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1105349379001303",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1971 PIPER ARROW II"
+ },
+ {
+  "id": "1525746016029743",
+  "year": 2013,
+  "make": "Cessna",
+  "model": "206H",
+  "price": 699900,
+  "location": "Bartlett, IL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1525746016029743",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "2013 CESSNA 206H STATIONAIR"
+ },
+ {
+  "id": "4462636483987163",
+  "year": 1959,
+  "make": "Cessna",
+  "model": "175A",
+  "price": 65000,
+  "location": "Inyokern, California",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4462636483987163/",
+  "source": "Planes for sale",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "✈️ JUST LISTED | 1959 CESSNA 175A SKYLARK ✈️"
+ },
+ {
+  "id": "3612949425538371",
+  "year": 1969,
+  "make": "Cessna",
+  "model": "150J",
+  "price": 40000,
+  "location": "Granger, IA",
+  "totalTime": null,
+  "smoh": 387.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3612949425538371",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1969 Cessna 150j"
+ },
+ {
+  "id": "1637163865117973",
+  "year": null,
+  "make": "Cessna",
+  "model": "172M",
+  "price": 180000,
+  "location": "Miami, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1637163865117973",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "Cessna 172M"
+ },
+ {
+  "id": "29220932730892963",
+  "year": 2014,
+  "make": "Piper",
+  "model": "Malibu Mirage",
+  "price": 825000,
+  "location": "Diego, California",
+  "totalTime": 1063.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29220932730892963/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "✈️ JUST LISTED | 2014 PIPER MALIBU MIRAGE"
+ },
+ {
+  "id": "2072658130456437",
+  "year": 1952,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 49900,
+  "location": "Kalispell, MT",
+  "totalTime": 5782.0,
+  "smoh": 1012.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2072658130456437",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1952 Beechcraft c-35 bonanza"
+ },
+ {
+  "id": "28518660634480216",
+  "year": 1965,
+  "make": "Cessna",
+  "model": "150E",
+  "price": 52000,
+  "location": "Long Beach, CA",
+  "totalTime": 7652.0,
+  "smoh": 753.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/28518660634480216",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1965 CESSNA 150E"
+ },
+ {
+  "id": "2349780619155197",
+  "year": 1958,
+  "make": "Cessna",
+  "model": "172",
+  "price": 75000,
+  "location": "Valley Springs, CA",
+  "totalTime": 3690.0,
+  "smoh": 795.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2349780619155197",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1958 Cessna 172 Skyhawk"
+ },
+ {
+  "id": "1095718376635736",
+  "year": 1969,
+  "make": "Piper",
+  "model": "Cherokee",
+  "price": 74995,
+  "location": "Newport, ME",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1095718376635736",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1969 Piper Cherokee PA28-160"
+ },
+ {
+  "id": "40332302649701607",
+  "year": 1975,
+  "make": "Beechcraft",
+  "model": "Sundowner",
+  "price": 135000,
+  "location": "Fayetteville, Arkansas",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/aircraftsaleandtrade/permalink/40332302649701607/",
+  "source": "Aircraft Sale and Trade",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1975 Beechcraft C-23 Sundowner For Sale, 3,351.2 Hours Airframe, 44.0 Hours S.M.O.H. in December 2024, with New Superior Case, New Superior Cylinders, New mags, New harness, New Ex"
+ },
+ {
+  "id": "1738331397267492",
+  "year": 1972,
+  "make": "Beechcraft",
+  "model": "Musketeer Sport",
+  "price": 54750,
+  "location": "Denton, TX",
+  "totalTime": 2622.0,
+  "smoh": 285.4,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1738331397267492",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1972 Beachcraft Sport b-19"
+ },
+ {
+  "id": "1154695327252293",
+  "year": 1973,
+  "make": "Grumman",
+  "model": "AA-1B",
+  "price": 28000,
+  "location": "Benson, AZ",
+  "totalTime": 3885.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1154695327252293",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1973 Grumman aa1b"
+ },
+ {
+  "id": "971728852260678",
+  "year": 1946,
+  "make": "Piper",
+  "model": "PA-12-150 Super Cruiser",
+  "price": 130000,
+  "location": "Ardmore, OK",
+  "totalTime": null,
+  "smoh": 793.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/971728852260678",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1946 Piper PA-12-150 Super Cruiser"
+ },
+ {
+  "id": "40329087246689814",
+  "year": 1996,
+  "make": "Piper",
+  "model": "Mirage",
+  "price": 565000,
+  "location": "Missoula, MT",
+  "totalTime": 1950.0,
+  "smoh": 1480.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/aircraftsaleandtrade/permalink/40329087246689814/",
+  "source": "Aircraft Sale and Trade",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "Ready to close in Q4, Looking for offers"
+ },
+ {
+  "id": "1155730304074160",
+  "year": null,
+  "make": "Piper",
+  "model": "Aerostar",
+  "price": 230000,
+  "location": "Devine, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1155730304074160",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "Piper Aerostar Super II"
+ },
+ {
+  "id": "1778256906620290",
+  "year": 1959,
+  "make": "Piper",
+  "model": "PA-24-180 Comanche",
+  "price": 79900,
+  "location": "Everett, WA",
+  "totalTime": null,
+  "smoh": 1132.6,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1778256906620290",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1959 Piper PA-24-180 Comanche"
+ },
+ {
+  "id": "1391208564080225",
+  "year": 1975,
+  "make": "Beechcraft",
+  "model": "Sierra",
+  "price": 79000,
+  "location": "Conway, SC",
+  "totalTime": 5916.0,
+  "smoh": 1290.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1391208564080225",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1975 Beechcraft B24R Sierra 200"
+ },
+ {
+  "id": "40323622340569638",
+  "year": 1961,
+  "make": "Cessna",
+  "model": "172B",
+  "price": 49900,
+  "location": "Marshall, MI",
+  "totalTime": 3458.3,
+  "smoh": 1947.2,
+  "stoh": null,
+  "url": "https://facebook.com/groups/aircraftsaleandtrade/permalink/40323622340569638/",
+  "source": "Aircraft Sale and Trade",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1961 Cessna 172B Skyhawk"
+ },
+ {
+  "id": "1136845452423604",
+  "year": 1997,
+  "make": "Piper",
+  "model": "Mirage",
+  "price": 200000,
+  "location": "Punta Gorda, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1136845452423604",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1997 Piper Mirage Pressurized",
+  "listingType": "share",
+  "shareFraction": "1/4"
+ },
+ {
+  "id": "1667342848516842",
+  "year": 1960,
+  "make": "Cessna",
+  "model": "175A",
+  "price": 99000,
+  "location": "Boyne Falls, MI",
+  "totalTime": 1818.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1667342848516842",
+  "source": "Marketplace",
+  "listed": "Nov 10, 2026",
+  "dateRaw": "2026-11-10",
+  "title": "1960 Cessna 175A"
+ },
+ {
+  "id": "1169700459363274",
+  "year": 1961,
+  "make": "Beechcraft",
+  "model": "Baron",
+  "price": 195500,
+  "location": "Peachtree City, GA",
+  "totalTime": 3700.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1169700459363274",
+  "source": "Marketplace",
+  "listed": "Nov 9, 2026",
+  "dateRaw": "2026-11-09",
+  "title": "1961 Beechcraft Baron"
+ },
+ {
+  "id": "30189071887347900",
+  "year": 1968,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 190000,
+  "location": "Peachtree City, GA",
+  "totalTime": 2930.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/30189071887347900",
+  "source": "Marketplace",
+  "listed": "Nov 9, 2026",
+  "dateRaw": "2026-11-09",
+  "title": "1968 Beechcraft v35a"
+ },
+ {
+  "id": "4461097757474369",
+  "year": 1959,
+  "make": "Cessna",
+  "model": "182B",
+  "price": 45000,
+  "location": "Gainesville, Texas",
+  "totalTime": null,
+  "smoh": 441.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4461097757474369/",
+  "source": "Planes for sale",
+  "listed": "Nov 9, 2026",
+  "dateRaw": "2026-11-09",
+  "title": "🛩️ 1959 CESSNA 182B SKYLANE ✈️",
+  "isAuction": true
+ },
+ {
+  "id": "2321847288661122",
+  "year": 1965,
+  "make": "Cessna",
+  "model": "172",
+  "price": 69000,
+  "location": "Katy, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2321847288661122",
+  "source": "Marketplace",
+  "listed": "Nov 9, 2026",
+  "dateRaw": "2026-11-09",
+  "title": "1965 Cessna 172 Skyhawk"
+ },
+ {
+  "id": "1113814151245980",
+  "year": 1955,
+  "make": "Piper",
+  "model": "PA-22-150 Tripacer",
+  "price": 44500,
+  "location": "Owasso, OK",
+  "totalTime": 3815.4,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1113814151245980",
+  "source": "Marketplace",
+  "listed": "Nov 9, 2026",
+  "dateRaw": "2026-11-09",
+  "title": "1955 Piper PA-22-150 Tripacer"
+ },
+ {
+  "id": "978281124878263",
+  "year": 2006,
+  "make": "Cessna",
+  "model": "T206H",
+  "price": 469900,
+  "location": "Cypress, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/978281124878263",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "2006 Cessna T206H"
+ },
+ {
+  "id": "29194087323577504",
+  "year": 1989,
+  "make": "Piper",
+  "model": "Malibu Mirage",
+  "price": 449000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": 1675.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29194087323577504/?sale_post_id=29194087323577504",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1989 Piper Malibu Mirage"
+ },
+ {
+  "id": "1669643854898482",
+  "year": 1963,
+  "make": "Cessna",
+  "model": "150C",
+  "price": 38950,
+  "location": "Forney, TX",
+  "totalTime": null,
+  "smoh": 1062.0,
+  "stoh": 87.0,
+  "url": "https://www.facebook.com/marketplace/item/1669643854898482",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1963 Cessna 150C"
+ },
+ {
+  "id": "1520758294445533",
+  "year": 1962,
+  "make": "Mooney",
+  "model": "M20C",
+  "price": 50000,
+  "location": "Plainview, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1520758294445533",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1962 Mooney M20C"
+ },
+ {
+  "id": "3266985490161743",
+  "year": 1969,
+  "make": "Piper",
+  "model": "Cherokee 140",
+  "price": 95000,
+  "location": "La Verne, CA",
+  "totalTime": 4392.0,
+  "smoh": 741.0,
+  "stoh": 165.0,
+  "url": "https://www.facebook.com/marketplace/item/3266985490161743",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1969 Piper PA28-140 Cherokee"
+ },
+ {
+  "id": "3394361454097521",
+  "year": 1948,
+  "make": "Cessna",
+  "model": "140",
+  "price": 43000,
+  "location": "Butte, MT",
+  "totalTime": 3000.0,
+  "smoh": 900.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3394361454097521",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1948 Cessna 140"
+ },
+ {
+  "id": "29190559350596968",
+  "year": 1964,
+  "make": "Cessna",
+  "model": "172E",
+  "price": 140000,
+  "location": "Amarillo, TX",
+  "totalTime": null,
+  "smoh": 794.8,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29190559350596968/?sale_post_id=29190559350596968",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1964 Cessna 172E"
+ },
+ {
+  "id": "1665787101998708",
+  "year": 2001,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 189995,
+  "location": "Murrieta, CA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1665787101998708",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "2001 Cirrus SR22 Single-Engine Aircraft"
+ },
+ {
+  "id": "2028293681167725",
+  "year": 1965,
+  "make": "Cessna",
+  "model": "182J",
+  "price": 79000,
+  "location": "Stevensville, MT",
+  "totalTime": 2650.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2028293681167725",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1965 Cessna 182j"
+ },
+ {
+  "id": "29639756192289296",
+  "year": 1953,
+  "make": "Cessna",
+  "model": "180",
+  "price": 162500,
+  "location": "Salisbury, MD",
+  "totalTime": 6387.2,
+  "smoh": 367.2,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/29639756192289296",
+  "source": "Marketplace",
+  "listed": "Nov 8, 2026",
+  "dateRaw": "2026-11-08",
+  "title": "1953 Cessna 180"
+ },
+ {
+  "id": "2261974967999336",
+  "year": 1955,
+  "make": "Cessna",
+  "model": "170B",
+  "price": 120000,
+  "location": "Carson City, NV",
+  "totalTime": null,
+  "smoh": 450.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2261974967999336",
+  "source": "Marketplace",
+  "listed": "Nov 7, 2026",
+  "dateRaw": "2026-11-07",
+  "title": "1955 Cessna 170B"
+ },
+ {
+  "id": "4458800144370797",
+  "year": 1980,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 42000,
+  "location": "Greenville, SC",
+  "totalTime": 15563.0,
+  "smoh": 2210.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4458800144370797/",
+  "source": "Planes for sale",
+  "listed": "Nov 7, 2026",
+  "dateRaw": "2026-11-07",
+  "title": "✈️ 1980 CESSNA 172N SKYHAWK — AUCTION NOW OPEN!",
+  "isAuction": true
+ },
+ {
+  "id": "1612608124001238",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "172G",
+  "price": 65000,
+  "location": "Memphis, TN",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1612608124001238",
+  "source": "Marketplace",
+  "listed": "Nov 7, 2026",
+  "dateRaw": "2026-11-07",
+  "title": "1967 Cessna  172g skyhawk "
+ },
+ {
+  "id": "1271603915167738",
+  "year": 1969,
+  "make": "Cessna",
+  "model": "401",
+  "price": 120000,
+  "location": "Sunrise, FL",
+  "totalTime": 14000.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1271603915167738",
+  "source": "Marketplace",
+  "listed": "Nov 7, 2026",
+  "dateRaw": "2026-11-07",
+  "title": "1969 Cessna 401"
+ },
+ {
+  "id": "1405811151321750",
+  "year": 1963,
+  "make": "Cessna",
+  "model": "182F",
+  "price": 165000,
+  "location": "Delaware, OH",
+  "totalTime": 5000.0,
+  "smoh": 910.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1405811151321750",
+  "source": "Marketplace",
+  "listed": "Nov 7, 2026",
+  "dateRaw": "2026-11-07",
+  "title": "1963 Cessna 182F"
+ },
+ {
+  "id": "2021312648561194",
+  "year": 1978,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 119000,
+  "location": "Houston, TX",
+  "totalTime": null,
+  "smoh": 1550.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2021312648561194",
+  "source": "Marketplace",
+  "listed": "Nov 7, 2026",
+  "dateRaw": "2026-11-07",
+  "title": "1978 Cessna 172n"
+ },
+ {
+  "id": "1453138112857469",
+  "year": 1983,
+  "make": "Vans",
+  "model": "RV-3",
+  "price": 48000,
+  "location": "Durant, OK",
+  "totalTime": 228.22,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1453138112857469",
+  "source": "Marketplace",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "1983 RV-3 Airplane"
+ },
+ {
+  "id": "973967988662364",
+  "year": 1970,
+  "make": "Beechcraft",
+  "model": "Baron",
+  "price": 249000,
+  "location": "Punta Gorda, FL",
+  "totalTime": 6940.0,
+  "smoh": 550.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/973967988662364",
+  "source": "Marketplace",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "1970 Beechcraft  Baron E55"
+ },
+ {
+  "id": "1132287582642353",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "150H",
+  "price": 45000,
+  "location": "Lake Charles, LA",
+  "totalTime": 3653.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1132287582642353",
+  "source": "Marketplace",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "1967 Cessna 150H"
+ },
+ {
+  "id": "4457475927836552",
+  "year": 2008,
+  "make": "Cessna",
+  "model": "T182T",
+  "price": 410000,
+  "location": "Helena, MT",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4457475927836552/",
+  "source": "Planes for sale",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "Flybuyer Aircraft Sales presents N6314R, a well-equipped 2008 Cessna T182T Skylane featuring a Garmin G1000 integrated flight deck, GFC 700 autopilot, Synthetic Vision Technology, "
+ },
+ {
+  "id": "1648530700092379",
+  "year": 1970,
+  "make": "Beechcraft",
+  "model": "Sundowner",
+  "price": 69500,
+  "location": "Boulder City, NV",
+  "totalTime": 5126.0,
+  "smoh": 1325.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1648530700092379",
+  "source": "Marketplace",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "1970 Beechcraft C23"
+ },
+ {
+  "id": "1904628094247515",
+  "year": 1972,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 114900,
+  "location": "Fremont, NE",
+  "totalTime": 3000.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1904628094247515",
+  "source": "Marketplace",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "1972 Piper arrow"
+ },
+ {
+  "id": "1701580701386771",
+  "year": 2002,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 724000,
+  "location": "Boca Raton, FL",
+  "totalTime": 963.2,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1701580701386771",
+  "source": "Marketplace",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "2002 Beechcraft a36"
+ },
+ {
+  "id": "2020189915330271",
+  "year": 1959,
+  "make": "Cessna",
+  "model": "182B",
+  "price": 35000,
+  "location": "League City, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2020189915330271",
+  "source": "Marketplace",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "1959 Cessna  182B",
+  "isProject": true,
+  "projectNote": "Not flyable"
+ },
+ {
+  "id": "29160576003595303",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "152",
+  "price": 67000,
+  "location": "Location not listed",
+  "totalTime": 5396.0,
+  "smoh": 830.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29160576003595303/?sale_post_id=29160576003595303",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 6, 2026",
+  "dateRaw": "2026-11-06",
+  "title": "1977 Cessna 152"
+ },
+ {
+  "id": "1998889577459381",
+  "year": 1966,
+  "make": "Cessna",
+  "model": "150G",
+  "price": 59000,
+  "location": "Phoenix, AZ",
+  "totalTime": null,
+  "smoh": 730.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1998889577459381",
+  "source": "Marketplace",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1966 Cessna 150G"
+ },
+ {
+  "id": "29289322800699030",
+  "year": 1946,
+  "make": "Piper",
+  "model": "PA-12",
+  "price": 96500,
+  "location": "Rapid City, SD",
+  "totalTime": 2210.0,
+  "smoh": 360.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/29289322800699030",
+  "source": "Marketplace",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1946 Piper PA-12"
+ },
+ {
+  "id": "3353589028364035",
+  "year": 1963,
+  "make": "Beechcraft",
+  "model": "Debonair",
+  "price": 55000,
+  "location": "Shingle Springs, CA",
+  "totalTime": 5271.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3353589028364035",
+  "source": "Marketplace",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1963 Beachcraft Debonair",
+  "isProject": true,
+  "projectNote": "Windshield removed"
+ },
+ {
+  "id": "4456209634629848",
+  "year": 1978,
+  "make": "Beechcraft",
+  "model": "Duchess",
+  "price": 195000,
+  "location": "Location not listed",
+  "totalTime": 5350.0,
+  "smoh": 1015.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4456209634629848/",
+  "source": "Planes for sale",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1978 Beechcraft Duchess BE-76 for sale."
+ },
+ {
+  "id": "29147913168194920",
+  "year": 1963,
+  "make": "Cessna",
+  "model": "182E",
+  "price": 97000,
+  "location": "Churchville, MD",
+  "totalTime": 4213.81,
+  "smoh": 1432.71,
+  "stoh": 314.3,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29147913168194920/?sale_post_id=29147913168194920",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1963 Cessna  182E"
+ },
+ {
+  "id": "1128881872884888",
+  "year": 1975,
+  "make": "Beechcraft",
+  "model": "Sierra",
+  "price": 189900,
+  "location": "Indiantown, FL",
+  "totalTime": null,
+  "smoh": 930.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1128881872884888",
+  "source": "Marketplace",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1975 Beechcraft sierra"
+ },
+ {
+  "id": "2414620122722226",
+  "year": 2001,
+  "make": "Cessna",
+  "model": "172S",
+  "price": 285000,
+  "location": "Burlington, VT",
+  "totalTime": 5660.0,
+  "smoh": 2400.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2414620122722226/",
+  "source": "Aircraft Marketplace",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "FOR SALE: 2001 CESSNA 172S SKYHAWK SP – N364SP"
+ },
+ {
+  "id": "2126441111577080",
+  "year": 1979,
+  "make": "Piper",
+  "model": "Seneca",
+  "price": 149900,
+  "location": "Jacksonville, FL",
+  "totalTime": 2440.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2126441111577080",
+  "source": "Marketplace",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1979 Piper Seneca PA-34"
+ },
+ {
+  "id": "4054199574722094",
+  "year": 1979,
+  "make": "Piper",
+  "model": "PA-28-236",
+  "price": 230000,
+  "location": "Lancaster, NY",
+  "totalTime": null,
+  "smoh": 813.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/4054199574722094",
+  "source": "Marketplace",
+  "listed": "Nov 5, 2026",
+  "dateRaw": "2026-11-05",
+  "title": "1979 PIPER PA-28-236 DAKOTA"
+ },
+ {
+  "id": "2993937360972512",
+  "year": 1990,
+  "make": "Piper",
+  "model": "PA-18 Super Cub",
+  "price": 189000,
+  "location": "Long Beach, CA",
+  "totalTime": 404.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2993937360972512",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1990 Piper PA-18 Super Cub "
+ },
+ {
+  "id": "1850838329403108",
+  "year": 1965,
+  "make": "Piper",
+  "model": "Cherokee 150",
+  "price": 95000,
+  "location": "Caldwell, ID",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1850838329403108",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1965 Piper Cherokee 150/180"
+ },
+ {
+  "id": "4454990614751750",
+  "year": 1966,
+  "make": "Piper",
+  "model": "Cherokee",
+  "price": 165000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4454990614751750/",
+  "source": "Planes for sale",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1966 Piper Cherokee PA28 235B — $165,000"
+ },
+ {
+  "id": "1824959126299224",
+  "year": 2017,
+  "make": "Vans",
+  "model": "RV-10",
+  "price": 399000,
+  "location": "Bozeman, MT",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1824959126299224",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "2017 Van's RV-10"
+ },
+ {
+  "id": "4156330041334406",
+  "year": 2006,
+  "make": "Cirrus",
+  "model": "SR20",
+  "price": 219000,
+  "location": "Salisbury, MD",
+  "totalTime": 9296.5,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/4156330041334406",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "2006 Cirrus sr 20"
+ },
+ {
+  "id": "2260622194670512",
+  "year": 1954,
+  "make": "Cessna",
+  "model": "170B",
+  "price": 100000,
+  "location": "Fort Worth, TX",
+  "totalTime": 4358.0,
+  "smoh": 348.3,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2260622194670512",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1954 Cessna 170b"
+ },
+ {
+  "id": "1814055233131375",
+  "year": 1956,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 81000,
+  "location": "Clinton, OK",
+  "totalTime": 5731.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1814055233131375",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1956 Beechcraft Bonanza G35"
+ },
+ {
+  "id": "1099279446067243",
+  "year": 1978,
+  "make": "Beechcraft",
+  "model": "Sierra",
+  "price": 95000,
+  "location": "Ball, LA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1099279446067243",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1978 Beechcraft Sierra C24R"
+ },
+ {
+  "id": "1132438149535978",
+  "year": 1961,
+  "make": "Mooney",
+  "model": "M20",
+  "price": 59999,
+  "location": "Independence, OR",
+  "totalTime": 3200.0,
+  "smoh": 10.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1132438149535978",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1961 Mooney M20-B"
+ },
+ {
+  "id": "2725048097966157",
+  "year": 1977,
+  "make": "Beechcraft",
+  "model": "Baron",
+  "price": 349900,
+  "location": "Carrabassett Valley, ME",
+  "totalTime": 202.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2725048097966157",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1977 Beechcraft  Baron"
+ },
+ {
+  "id": "1831756001198038",
+  "year": null,
+  "make": "Cessna",
+  "model": "172",
+  "price": 119000,
+  "location": "New Port Richey, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1831756001198038",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "Cessna 172 RG"
+ },
+ {
+  "id": "1944198196560515",
+  "year": 1967,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 135000,
+  "location": "New Buffalo, MI",
+  "totalTime": null,
+  "smoh": 1542.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1944198196560515",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "1967 Beechcraft Bonanza V35\nLast Annual : November 7, 2026\nLast flown :    November 7, 2026"
+ },
+ {
+  "id": "986911737189922",
+  "year": 2018,
+  "make": "Cirrus",
+  "model": "SR20",
+  "price": 409000,
+  "location": "Pompano Beach, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/986911737189922",
+  "source": "Marketplace",
+  "listed": "Nov 4, 2026",
+  "dateRaw": "2026-11-04",
+  "title": "2018 Cirrus SR20 G6"
+ },
+ {
+  "id": "1083065438042777",
+  "year": 1972,
+  "make": "Cessna",
+  "model": "150L",
+  "price": 45000,
+  "location": "Schuylkill Haven, PA",
+  "totalTime": 4715.0,
+  "smoh": 1500.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1083065438042777",
+  "source": "Marketplace",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1972 Cessna 150L Commuter"
+ },
+ {
+  "id": "1694144535406801",
+  "year": 1967,
+  "make": "Piper",
+  "model": "PA-30 Twin Comanche",
+  "price": 74900,
+  "location": "Delray Beach, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1694144535406801",
+  "source": "Marketplace",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1967 Piper PA30 Twin Comanche"
+ },
+ {
+  "id": "2205397660381477",
+  "year": 1979,
+  "make": "Cessna",
+  "model": "152",
+  "price": 79500,
+  "location": "Las Vegas, NV",
+  "totalTime": 10877.6,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2205397660381477",
+  "source": "Marketplace",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1979 Cessna 152 Commuter with Garmin NAV"
+ },
+ {
+  "id": "4453753954875416",
+  "year": 1976,
+  "make": "Rockwell",
+  "model": "Commander 114",
+  "price": 199900,
+  "location": "Ruston, LA",
+  "totalTime": 2443.0,
+  "smoh": 830.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4453753954875416/",
+  "source": "Planes for sale",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1976 Rockwell Commander 114 — $199,900 — KRSN Ruston, LA"
+ },
+ {
+  "id": "40138220215776519",
+  "year": 1964,
+  "make": "Mooney",
+  "model": "M20D",
+  "price": 65000,
+  "location": "1A6",
+  "totalTime": 406.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/aircraftsaleandtrade/permalink/40138220215776519/",
+  "source": "Aircraft Sale and Trade",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1964 Mooney M20D"
+ },
+ {
+  "id": "1165321912594148",
+  "year": 1971,
+  "make": "Piper",
+  "model": "Seneca",
+  "price": 170000,
+  "location": "Charleston, SC",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1165321912594148",
+  "source": "Marketplace",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1971 Piper Seneca 1"
+ },
+ {
+  "id": "1457602942995186",
+  "year": 1965,
+  "make": "Cessna",
+  "model": "150F",
+  "price": 46500,
+  "location": "Buckeye, AZ",
+  "totalTime": 6111.41,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1457602942995186",
+  "source": "Marketplace",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1965 Cessna 150f"
+ },
+ {
+  "id": "28842364535444452",
+  "year": 1991,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 215000,
+  "location": "Buckeye, AZ",
+  "totalTime": 26040.8,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/28842364535444452",
+  "source": "Marketplace",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1991 Beechcraft f33a Bonanza"
+ },
+ {
+  "id": "1074194565664242",
+  "year": 1972,
+  "make": "Cessna",
+  "model": "182P",
+  "price": 175000,
+  "location": "Leander, TX",
+  "totalTime": 2550.0,
+  "smoh": 1135.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1074194565664242",
+  "source": "Marketplace",
+  "listed": "Nov 3, 2026",
+  "dateRaw": "2026-11-03",
+  "title": "1972 Cessna 182P"
+ },
+ {
+  "id": "29108380978814806",
+  "year": 1960,
+  "make": "Piper",
+  "model": "Comanche",
+  "price": 145000,
+  "location": "Location not listed",
+  "totalTime": 5800.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29108380978814806/?sale_post_id=29108380978814806",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Nov 2, 2026",
+  "dateRaw": "2026-11-02",
+  "title": "Piper Comanche 250"
+ },
+ {
+  "id": "4452570208327124",
+  "year": 1976,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 139000,
+  "location": "Pembroke Pines, FL",
+  "totalTime": 2916.3,
+  "smoh": 618.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1637809423136564/permalink/4452570208327124/",
+  "source": "Planes for sale",
+  "listed": "Nov 2, 2026",
+  "dateRaw": "2026-11-02",
+  "title": "Selling my 1976 Cessna 172N — N733HJ — $139,000."
+ },
+ {
+  "id": "1644000580839456",
+  "year": 1963,
+  "make": "Cessna",
+  "model": "150C",
+  "price": 44500,
+  "location": "Buckley, WA",
+  "totalTime": 4290.0,
+  "smoh": 1590.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1644000580839456",
+  "source": "Marketplace",
+  "listed": "Nov 2, 2026",
+  "dateRaw": "2026-11-02",
+  "title": "1963 Cessna 150C"
+ },
+ {
+  "id": "1372007784802498",
+  "year": 2002,
+  "make": "Mooney",
+  "model": "Mooney",
+  "price": 375000,
+  "location": "Bartlett, IL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1372007784802498",
+  "source": "Marketplace",
+  "listed": "Nov 2, 2026",
+  "dateRaw": "2026-11-02",
+  "title": "2002 Mooney Ovation N1051K"
+ },
+ {
+  "id": "1617517792615703",
+  "year": 1967,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 129000,
+  "location": "Gig Harbor, WA",
+  "totalTime": 3280.3,
+  "smoh": 1155.2,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1617517792615703",
+  "source": "Marketplace",
+  "listed": "Nov 2, 2026",
+  "dateRaw": "2026-11-02",
+  "title": "1967 Beechcraft V35 bonanza"
+ },
+ {
+  "id": "1074245802336867",
+  "year": 2021,
+  "make": "Cirrus",
+  "model": "SR20",
+  "price": 459900,
+  "location": "Carlsbad, CA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1074245802336867",
+  "source": "Marketplace",
+  "listed": "Nov 1, 2026",
+  "dateRaw": "2026-11-01",
+  "title": "2021 Cirrus SR20"
+ },
+ {
+  "id": "2607915573052907",
+  "year": 2025,
+  "make": "Diamond",
+  "model": "DA62",
+  "price": 1590000,
+  "location": "Bartlett, IL",
+  "totalTime": 42.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2607915573052907",
+  "source": "Marketplace",
+  "listed": "Nov 1, 2026",
+  "dateRaw": "2026-11-01",
+  "title": "2025 Diamond DA62"
+ },
+ {
+  "id": "1171459512223415",
+  "year": null,
+  "make": "Cessna",
+  "model": "172G",
+  "price": 62500,
+  "location": "Leon, KS",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1171459512223415",
+  "source": "Marketplace",
+  "listed": "Nov 1, 2026",
+  "dateRaw": "2026-11-01",
+  "title": "Cessna Skyhawk 172G"
+ },
+ {
+  "id": "1679407473332653",
+  "year": 1973,
+  "make": "Piper",
+  "model": "Cherokee 180",
+  "price": 79500,
+  "location": "Lima, OH",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1679407473332653",
+  "source": "Marketplace",
+  "listed": "Nov 1, 2026",
+  "dateRaw": "2026-11-01",
+  "title": "Airplane - 1973 Piper Cherokee 180"
+ },
+ {
+  "id": "2385919301949445",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 96500,
+  "location": "Miami, FL",
+  "totalTime": 10298.0,
+  "smoh": 1764.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2385919301949445",
+  "source": "Marketplace",
+  "listed": "Nov 1, 2026",
+  "dateRaw": "2026-11-01",
+  "title": "1977 Cessna  172N "
+ },
+ {
+  "id": "1790259875540131",
+  "year": 2004,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 379900,
+  "location": "Shelbyville, TN",
+  "totalTime": 2234.0,
+  "smoh": 386.8,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1790259875540131",
+  "source": "Marketplace",
+  "listed": "Nov 1, 2026",
+  "dateRaw": "2026-11-01",
+  "title": "2004 Cirrus SR22 with new Vantage"
+ },
+ {
+  "id": "1123237003406441",
+  "year": 1976,
+  "make": "Mooney",
+  "model": "M20F",
+  "price": 85000,
+  "location": "Roanoke, TX",
+  "totalTime": 918.0,
+  "smoh": 918.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1123237003406441",
+  "source": "Marketplace",
+  "listed": "Oct 31, 2026",
+  "dateRaw": "2026-10-31",
+  "title": "1976 Mooney M20F"
+ },
+ {
+  "id": "3612743978888864",
+  "year": 2019,
+  "make": "Cessna",
+  "model": "182T",
+  "price": 609995,
+  "location": "Richfield, UT",
+  "totalTime": 491.3,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3612743978888864",
+  "source": "Marketplace",
+  "listed": "Oct 31, 2026",
+  "dateRaw": "2026-10-31",
+  "title": "2019 CESSNA 182T SKYLANE FOR SALE!"
+ },
+ {
+  "id": "3033007313711347",
+  "year": 2016,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 599995,
+  "location": "Richfield, UT",
+  "totalTime": 1048.5,
+  "smoh": 744.6,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3033007313711347",
+  "source": "Marketplace",
+  "listed": "Oct 31, 2026",
+  "dateRaw": "2026-10-31",
+  "title": "2016 CIRRUS SR22-T G5 GTS CARBON PACKAGE"
+ },
+ {
+  "id": "4464994980310791",
+  "year": null,
+  "make": "Beechcraft",
+  "model": "Duke",
+  "price": 220000,
+  "location": "Port St Lucie, FL",
+  "totalTime": 3100.0,
+  "smoh": 670.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/4464994980310791",
+  "source": "Marketplace",
+  "listed": "Oct 31, 2026",
+  "dateRaw": "2026-10-31",
+  "title": "Beechcraft B60 Duke"
+ },
+ {
+  "id": "2350467145688166",
+  "year": 1963,
+  "make": "Piper",
+  "model": "Cherokee 180",
+  "price": 95000,
+  "location": "Conroe, TX",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2350467145688166",
+  "source": "Marketplace",
+  "listed": "Oct 30, 2026",
+  "dateRaw": "2026-10-30",
+  "title": "1963 Piper  Cherokee 180"
+ },
+ {
+  "id": "2408353173348921",
+  "year": 1979,
+  "make": "Cessna",
+  "model": "TR182",
+  "price": 276000,
+  "location": "Birmingham, Alabama",
+  "totalTime": 4150.0,
+  "smoh": 75.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2408353173348921/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 30, 2026",
+  "dateRaw": "2026-10-30",
+  "title": "$276,000 - 1979 Cessna TR182"
+ },
+ {
+  "id": "29053421407644097",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "150",
+  "price": 48500,
+  "location": "Location not listed",
+  "totalTime": 4700.0,
+  "smoh": 883.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29053421407644097/?sale_post_id=29053421407644097",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 29, 2026",
+  "dateRaw": "2026-10-29",
+  "title": "Cessna 150 Aircraft"
+ },
+ {
+  "id": "1039795499125610",
+  "year": 1966,
+  "make": "Cessna",
+  "model": "T210F",
+  "price": 169000,
+  "location": "Powell, WY",
+  "totalTime": null,
+  "smoh": 748.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1039795499125610",
+  "source": "Marketplace",
+  "listed": "Oct 29, 2026",
+  "dateRaw": "2026-10-29",
+  "title": "1966 Cessna T210F"
+ },
+ {
+  "id": "1453597366228930",
+  "year": 1964,
+  "make": "Cessna",
+  "model": "C182G",
+  "price": 239000,
+  "location": "Baker, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1453597366228930",
+  "source": "Marketplace",
+  "listed": "Oct 29, 2026",
+  "dateRaw": "2026-10-29",
+  "title": "1964 Cessna c182g"
+ },
+ {
+  "id": "1639812194457702",
+  "year": 1947,
+  "make": "Cessna",
+  "model": "120",
+  "price": 40000,
+  "location": "Woods Cross, UT",
+  "totalTime": 4693.0,
+  "smoh": null,
+  "stoh": 727.0,
+  "url": "https://www.facebook.com/marketplace/item/1639812194457702",
+  "source": "Marketplace",
+  "listed": "Oct 29, 2026",
+  "dateRaw": "2026-10-29",
+  "title": "47' Cessna 120"
+ },
+ {
+  "id": "2025436421500079",
+  "year": 1968,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 219000,
+  "location": "Creston, IA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2025436421500079",
+  "source": "Marketplace",
+  "listed": "Oct 29, 2026",
+  "dateRaw": "2026-10-29",
+  "title": "1968 Beechcraft v35a"
+ },
+ {
+  "id": "29046083398377898",
+  "year": 1968,
+  "make": "Cessna",
+  "model": "177",
+  "price": 79500,
+  "location": "Independence, KS",
+  "totalTime": 4500.0,
+  "smoh": null,
+  "stoh": 500.0,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29046083398377898/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 29, 2026",
+  "dateRaw": "2026-10-29",
+  "title": "## 1968 Cessna 177 Cardinal | 500 TSOH | New Paint | $79,500"
+ },
+ {
+  "id": "1837567787356385",
+  "year": 1954,
+  "make": "Cessna",
+  "model": "170B",
+  "price": 106000,
+  "location": "Saegertown, PA",
+  "totalTime": 2907.1,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1837567787356385",
+  "source": "Marketplace",
+  "listed": "Oct 28, 2026",
+  "dateRaw": "2026-10-28",
+  "title": "1954 Cessna 170B - N2581C"
+ },
+ {
+  "id": "29463616219912644",
+  "year": 1979,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 124900,
+  "location": "Huntington, IN",
+  "totalTime": 4565.0,
+  "smoh": 3065.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/29463616219912644",
+  "source": "Marketplace",
+  "listed": "Oct 28, 2026",
+  "dateRaw": "2026-10-28",
+  "title": "1979 Piper Turbo Arrow IV"
+ },
+ {
+  "id": "1101345952505328",
+  "year": 1985,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 450000,
+  "location": "Ellensburg, WA",
+  "totalTime": 6054.3,
+  "smoh": 1410.3,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1101345952505328",
+  "source": "Marketplace",
+  "listed": "Oct 28, 2026",
+  "dateRaw": "2026-10-28",
+  "title": "1985 Beechcraft a36 bonanza tat turbo normalized, tks, g3x/gfc 500"
+ },
+ {
+  "id": "1819105322877784",
+  "year": 1976,
+  "make": "Cessna",
+  "model": "177B",
+  "price": 79900,
+  "location": "Morehead, KY",
+  "totalTime": 5000.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1819105322877784",
+  "source": "Marketplace",
+  "listed": "Oct 28, 2026",
+  "dateRaw": "2026-10-28",
+  "title": "1976 Cessna cardinal 177b"
+ },
+ {
+  "id": "2020805018558201",
+  "year": 1969,
+  "make": "Piper",
+  "model": "Cherokee 180D",
+  "price": 140000,
+  "location": "Boerne, TX",
+  "totalTime": 9966.0,
+  "smoh": 845.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2020805018558201",
+  "source": "Marketplace",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "1969 Piper Cherokee 180D - N7922N FRESH ANNUAL!"
+ },
+ {
+  "id": "29020965264223045",
+  "year": 2019,
+  "make": "Cessna",
+  "model": "T206H",
+  "price": 695000,
+  "location": "Location not listed",
+  "totalTime": 725.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29020965264223045/?sale_post_id=29020965264223045",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "2019 Cessna T206H Stationair HD"
+ },
+ {
+  "id": "29020194504300121",
+  "year": 1969,
+  "make": "Piper",
+  "model": "Cherokee 140",
+  "price": 99500,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29020194504300121/?sale_post_id=29020194504300121",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "1969 Piper 140/150"
+ },
+ {
+  "id": "1532220585100522",
+  "year": null,
+  "make": "Piper",
+  "model": "PA-12 Super Cruiser",
+  "price": 97000,
+  "location": "Palm Harbor, FL",
+  "totalTime": 2322.0,
+  "smoh": 49.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1532220585100522",
+  "source": "Marketplace",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "PA-12 Super Cruiser - Piper Aircraft"
+ },
+ {
+  "id": "1145638918037305",
+  "year": 1971,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 235000,
+  "location": "Fayetteville, AR",
+  "totalTime": null,
+  "smoh": 113.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1145638918037305",
+  "source": "Marketplace",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "1971 Beechcraft F33A Bonanza"
+ },
+ {
+  "id": "29019383171047921",
+  "year": null,
+  "make": "Cessna",
+  "model": "172",
+  "price": 70000,
+  "location": "Location not listed",
+  "totalTime": 4300.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/29019383171047921/?sale_post_id=29019383171047921",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "Cessna 172"
+ },
+ {
+  "id": "2185748858964300",
+  "year": 1981,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 239000,
+  "location": "Scottsdale, AZ",
+  "totalTime": 4774.0,
+  "smoh": 638.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2185748858964300",
+  "source": "Marketplace",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "1981 Beechcraft Bonanza A36TC  Turbocharged Airplane"
+ },
+ {
+  "id": "1440515480769438",
+  "year": 1974,
+  "make": "Cessna",
+  "model": "172M",
+  "price": 105000,
+  "location": "Elkin, NC",
+  "totalTime": 870.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1440515480769438",
+  "source": "Marketplace",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "Cessna 172M....870hrs TTA&E"
+ },
+ {
+  "id": "994170953020016",
+  "year": 1977,
+  "make": "Piper",
+  "model": "Archer",
+  "price": 168000,
+  "location": "Shirley, NY",
+  "totalTime": null,
+  "smoh": 500.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/994170953020016",
+  "source": "Marketplace",
+  "listed": "Oct 27, 2026",
+  "dateRaw": "2026-10-27",
+  "title": "1977 Piper archer ii"
+ },
+ {
+  "id": "3772256619579522",
+  "year": 1980,
+  "make": "Cessna",
+  "model": "340A",
+  "price": 329000,
+  "location": "Gig Harbor, WA",
+  "totalTime": 3938.8,
+  "smoh": 1092.1,
+  "stoh": 1182.2,
+  "url": "https://www.facebook.com/marketplace/item/3772256619579522",
+  "source": "Marketplace",
+  "listed": "Oct 26, 2026",
+  "dateRaw": "2026-10-26",
+  "title": "1980 Cessna 340a"
+ },
+ {
+  "id": "1607481261154001",
+  "year": 1969,
+  "make": "Beechcraft",
+  "model": "Musketeer",
+  "price": 69900,
+  "location": "Hudson, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1607481261154001",
+  "source": "Marketplace",
+  "listed": "Oct 26, 2026",
+  "dateRaw": "2026-10-26",
+  "title": "1969 Beechcraft Musketeer B23"
+ },
+ {
+  "id": "1428457142738827",
+  "year": null,
+  "make": "Cessna",
+  "model": "152",
+  "price": 95000,
+  "location": "Miami, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1428457142738827",
+  "source": "Marketplace",
+  "listed": "Oct 26, 2026",
+  "dateRaw": "2026-10-26",
+  "title": "Cessna 152 -Reimagined x2"
+ },
+ {
+  "id": "1790258882119009",
+  "year": 1962,
+  "make": "Cessna",
+  "model": "150B",
+  "price": 35000,
+  "location": "Palatka, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1790258882119009",
+  "source": "Marketplace",
+  "listed": "Oct 26, 2026",
+  "dateRaw": "2026-10-26",
+  "title": "1962 Cessna 150b"
+ },
+ {
+  "id": "1426060579082057",
+  "year": 1953,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 92500,
+  "location": "Fowler, CO",
+  "totalTime": 2418.0,
+  "smoh": 1028.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1426060579082057",
+  "source": "Marketplace",
+  "listed": "Oct 26, 2026",
+  "dateRaw": "2026-10-26",
+  "title": "Beechcraft Bonanza 1953 d35"
+ },
+ {
+  "id": "1486181010373752",
+  "year": 1968,
+  "make": "Piper",
+  "model": "Cherokee",
+  "price": 84500,
+  "location": "Bethel Island, CA",
+  "totalTime": null,
+  "smoh": 170.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1486181010373752",
+  "source": "Marketplace",
+  "listed": "Oct 26, 2026",
+  "dateRaw": "2026-10-26",
+  "title": "Piper Cherokee PA-28 Aircraft"
+ },
+ {
+  "id": "1581897149924017",
+  "year": 1997,
+  "make": "Mooney",
+  "model": "Mooney",
+  "price": 224500,
+  "location": "Spring Hill, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1581897149924017",
+  "source": "Marketplace",
+  "listed": "Oct 25, 2026",
+  "dateRaw": "2026-10-25",
+  "title": "1997 Mooney Ovation"
+ },
+ {
+  "id": "1473164108069901",
+  "year": 1957,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 87000,
+  "location": "Ashland, OR",
+  "totalTime": 5677.7,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1473164108069901",
+  "source": "Marketplace",
+  "listed": "Oct 25, 2026",
+  "dateRaw": "2026-10-25",
+  "title": "Fully Restored IFR Beechcraft Bonanza H35"
+ },
+ {
+  "id": "1132318756222455",
+  "year": 1963,
+  "make": "Beechcraft",
+  "model": "Musketeer",
+  "price": 65000,
+  "location": "Versailles, MO",
+  "totalTime": 3530.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1132318756222455",
+  "source": "Marketplace",
+  "listed": "Oct 24, 2026",
+  "dateRaw": "2026-10-24",
+  "title": "1963 Beechcraft musketeer"
+ },
+ {
+  "id": "1698385025071237",
+  "year": 1974,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 45000,
+  "location": "St Petersburg, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1698385025071237",
+  "source": "Marketplace",
+  "listed": "Oct 24, 2026",
+  "dateRaw": "2026-10-24",
+  "title": "1974 Piper arrow",
+  "isProject": true,
+  "projectNote": "Front gear collapsed"
+ },
+ {
+  "id": "3299294730279777",
+  "year": 2008,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 399950,
+  "location": "North Las Vegas, NV",
+  "totalTime": 1630.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3299294730279777",
+  "source": "Marketplace",
+  "listed": "Oct 24, 2026",
+  "dateRaw": "2026-10-24",
+  "title": "2008 Cirrus SR 22TN"
+ },
+ {
+  "id": "2401856407331931",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 134900,
+  "location": "Based at Huntingburg, Indiana (KHNB)",
+  "totalTime": null,
+  "smoh": 1203.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2401856407331931/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 24, 2026",
+  "dateRaw": "2026-10-24",
+  "title": "✈️ FOR SALE — 1977 CESSNA 172N SKYHAWK"
+ },
+ {
+  "id": "1688854512666261",
+  "year": 1961,
+  "make": "Cessna",
+  "model": "182D",
+  "price": 60000,
+  "location": "Bentonville, AR",
+  "totalTime": 2615.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/890212519197135/permalink/1688854512666261/",
+  "source": "CHEAP AIRCRAFT FOR SALE AND PARTS",
+  "listed": "Oct 24, 2026",
+  "dateRaw": "2026-10-24",
+  "title": "1961 Cessna 182D, N9991T, in Bentonville, AR. Total time 2,615 hours. Continental O-470-L, 230 HP, constant speed prop, 4 seats. Fresh September 2026 annual inspection. Propeller o",
+  "isAuction": true
+ },
+ {
+  "id": "1866720104463913",
+  "year": 2004,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 299000,
+  "location": "Gig Harbor, WA",
+  "totalTime": 1750.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1866720104463913",
+  "source": "Marketplace",
+  "listed": "Oct 24, 2026",
+  "dateRaw": "2026-10-24",
+  "title": "2004 Cirrus SR-22 G2"
+ },
+ {
+  "id": "29526833516921789",
+  "year": null,
+  "make": "Cessna",
+  "model": "C150H",
+  "price": 37000,
+  "location": "Douglas, GA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/29526833516921789",
+  "source": "Marketplace",
+  "listed": "Oct 23, 2026",
+  "dateRaw": "2026-10-23",
+  "title": "Cessna c150H"
+ },
+ {
+  "id": "1683357370117197",
+  "year": 1973,
+  "make": "Beechcraft",
+  "model": "Sierra",
+  "price": 125000,
+  "location": "Houma, LA",
+  "totalTime": 3243.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1683357370117197",
+  "source": "Marketplace",
+  "listed": "Oct 23, 2026",
+  "dateRaw": "2026-10-23",
+  "title": "1973 Beechcraft Sierra 200 B24R"
+ },
+ {
+  "id": "28962333140086258",
+  "year": 1968,
+  "make": "Cessna",
+  "model": "210H",
+  "price": 330000,
+  "location": "Kissimmee, FL",
+  "totalTime": 3197.4,
+  "smoh": 105.4,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28962333140086258/?sale_post_id=28962333140086258",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 23, 2026",
+  "dateRaw": "2026-10-23",
+  "title": "1968 Cesna 210 h centurion"
+ },
+ {
+  "id": "1486631493333570",
+  "year": 1968,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 139000,
+  "location": "Atlanta, TX",
+  "totalTime": 4200.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1486631493333570",
+  "source": "Marketplace",
+  "listed": "Oct 23, 2026",
+  "dateRaw": "2026-10-23",
+  "title": "1968 Piper Arrow PA-28R-180"
+ },
+ {
+  "id": "1455242502603990",
+  "year": 1971,
+  "make": "Piper",
+  "model": "Cherokee 140",
+  "price": 70000,
+  "location": "Homestead, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1455242502603990",
+  "source": "Marketplace",
+  "listed": "Oct 22, 2026",
+  "dateRaw": "2026-10-22",
+  "title": "Piper Cherokee 140"
+ },
+ {
+  "id": "1670360368435165",
+  "year": 1980,
+  "make": "Cessna",
+  "model": "172RG",
+  "price": 169000,
+  "location": "Doral, FL",
+  "totalTime": 7251.0,
+  "smoh": 1212.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1670360368435165",
+  "source": "Marketplace",
+  "listed": "Oct 22, 2026",
+  "dateRaw": "2026-10-22",
+  "title": "1980 CESNA 172RG CUTLASS"
+ },
+ {
+  "id": "1567484021845444",
+  "year": 1956,
+  "make": "Cessna",
+  "model": "172",
+  "price": 48000,
+  "location": "Bozeman, MT",
+  "totalTime": 3000.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1567484021845444",
+  "source": "Marketplace",
+  "listed": "Oct 22, 2026",
+  "dateRaw": "2026-10-22",
+  "title": "1956 Cessna 172 Price reduction!"
+ },
+ {
+  "id": "1847673569701107",
+  "year": 1979,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 75000,
+  "location": "Fayetteville, AR",
+  "totalTime": 11932.0,
+  "smoh": 1650.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1847673569701107",
+  "source": "Marketplace",
+  "listed": "Oct 22, 2026",
+  "dateRaw": "2026-10-22",
+  "title": "1979 Piper Arrow IV"
+ },
+ {
+  "id": "1731209945230816",
+  "year": 1961,
+  "make": "Beechcraft",
+  "model": "Debonair",
+  "price": 84999,
+  "location": "Fort Worth, TX",
+  "totalTime": 325.0,
+  "smoh": 325.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1731209945230816",
+  "source": "Marketplace",
+  "listed": "Oct 22, 2026",
+  "dateRaw": "2026-10-22",
+  "title": "1961 Beechcraft Debonair B33 - Fresh Overhaul"
+ },
+ {
+  "id": "1610939760829877",
+  "year": 1979,
+  "make": "Piper",
+  "model": "Dakota",
+  "price": 209000,
+  "location": "Denver, CO",
+  "totalTime": 1104.91,
+  "smoh": 343.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1610939760829877",
+  "source": "Marketplace",
+  "listed": "Oct 22, 2026",
+  "dateRaw": "2026-10-22",
+  "title": "1979 Piper turbo dakota"
+ },
+ {
+  "id": "3027524667615046",
+  "year": 1973,
+  "make": "Beechcraft",
+  "model": "Sierra",
+  "price": 105000,
+  "location": "Hollister, MO",
+  "totalTime": null,
+  "smoh": 1207.2,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/3027524667615046",
+  "source": "Marketplace",
+  "listed": "Oct 21, 2026",
+  "dateRaw": "2026-10-21",
+  "title": "1973 BEECHCRAFT SIERRA 200 🛩️"
+ },
+ {
+  "id": "1115349827575100",
+  "year": 1973,
+  "make": "Beechcraft",
+  "model": "Musketeer",
+  "price": 75000,
+  "location": "Enfield, CT",
+  "totalTime": 4900.0,
+  "smoh": 850.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1115349827575100",
+  "source": "Marketplace",
+  "listed": "Oct 21, 2026",
+  "dateRaw": "2026-10-21",
+  "title": "1973 Beechcraft musketeer b-19 sport"
+ },
+ {
+  "id": "2917557381946510",
+  "year": null,
+  "make": "Cessna",
+  "model": "C310Q",
+  "price": 85000,
+  "location": "Denver, CO",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2917557381946510",
+  "source": "Marketplace",
+  "listed": "Oct 21, 2026",
+  "dateRaw": "2026-10-21",
+  "title": "Looking for 1 partner for Cessna C310Q Denver Area.",
+  "listingType": "partnership",
+  "shareFraction": null
+ },
+ {
+  "id": "1429818551851284",
+  "year": 1978,
+  "make": "Cessna",
+  "model": "182Q",
+  "price": 189000,
+  "location": "Salem, OR",
+  "totalTime": 5600.0,
+  "smoh": 510.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1429818551851284",
+  "source": "Marketplace",
+  "listed": "Oct 21, 2026",
+  "dateRaw": "2026-10-21",
+  "title": "1978 Cessna 182Q Skylane"
+ },
+ {
+  "id": "2396072011198508",
+  "year": 1963,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 145000,
+  "location": "Fayetteville, AR",
+  "totalTime": 320.0,
+  "smoh": 320.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2396072011198508",
+  "source": "Marketplace",
+  "listed": "Oct 21, 2026",
+  "dateRaw": "2026-10-21",
+  "title": "1963 Beechcraft P35 Bonanza"
+ },
+ {
+  "id": "1046290461757952",
+  "year": 1973,
+  "make": "Cessna",
+  "model": "172M",
+  "price": 104450,
+  "location": "Lapeer, MI",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1046290461757952",
+  "source": "Marketplace",
+  "listed": "Oct 20, 2026",
+  "dateRaw": "2026-10-20",
+  "title": "1973 Cessna 172m"
+ },
+ {
+  "id": "4582242605341969",
+  "year": 1964,
+  "make": "Piper",
+  "model": "Cherokee",
+  "price": 110000,
+  "location": "Pompano Beach, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/4582242605341969",
+  "source": "Marketplace",
+  "listed": "Oct 20, 2026",
+  "dateRaw": "2026-10-20",
+  "title": "1964 Piper PA 28 - 235 HP CHEROKEE "
+ },
+ {
+  "id": "1591716272226063",
+  "year": 1968,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 92500,
+  "location": "Lott, TX",
+  "totalTime": 3482.0,
+  "smoh": 1362.0,
+  "stoh": 125.0,
+  "url": "https://www.facebook.com/marketplace/item/1591716272226063",
+  "source": "Marketplace",
+  "listed": "Oct 20, 2026",
+  "dateRaw": "2026-10-20",
+  "title": "1968 Piper Arrow II"
+ },
+ {
+  "id": "28925157553803817",
+  "year": 1973,
+  "make": "Cessna",
+  "model": "182P",
+  "price": 255000,
+  "location": "West Memphis, AR",
+  "totalTime": 2210.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28925157553803817/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 20, 2026",
+  "dateRaw": "2026-10-20",
+  "title": "1973 Cessna 182P Skylane for Sale! No expense has been spared on the maintenance of this bird. I'm posting for my friend."
+ },
+ {
+  "id": "28925114763808096",
+  "year": 2023,
+  "make": "Cessna",
+  "model": "T182T",
+  "price": 734900,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28925114763808096/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 20, 2026",
+  "dateRaw": "2026-10-20",
+  "title": "NEW LISTING: 2023 Cessna T182T Skylane N607TM"
+ },
+ {
+  "id": "2120492238826640",
+  "year": 1973,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 159000,
+  "location": "Concord, NC",
+  "totalTime": 6340.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2120492238826640",
+  "source": "Marketplace",
+  "listed": "Oct 20, 2026",
+  "dateRaw": "2026-10-20",
+  "title": "1973 Piper arrow ii"
+ },
+ {
+  "id": "1131266719557261",
+  "year": 1977,
+  "make": "Piper",
+  "model": "PA28R-201T",
+  "price": 125000,
+  "location": "Long Beach, CA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1131266719557261",
+  "source": "Marketplace",
+  "listed": "Oct 20, 2026",
+  "dateRaw": "2026-10-20",
+  "title": "Piper PA28R-201T  1977"
+ },
+ {
+  "id": "1124916840070417",
+  "year": 2005,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 354900,
+  "location": "Cumberland, WI",
+  "totalTime": 3400.0,
+  "smoh": 10.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1124916840070417",
+  "source": "Marketplace",
+  "listed": "Oct 19, 2026",
+  "dateRaw": "2026-10-19",
+  "title": "2005 Cirrus SR22-G2 GTS"
+ },
+ {
+  "id": "1553051523244952",
+  "year": 1962,
+  "make": "Beechcraft",
+  "model": "Debonair",
+  "price": 149999,
+  "location": "Altoona, IA",
+  "totalTime": null,
+  "smoh": 386.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1553051523244952",
+  "source": "Marketplace",
+  "listed": "Oct 19, 2026",
+  "dateRaw": "2026-10-19",
+  "title": "1962 Beechcraft Debonair"
+ },
+ {
+  "id": "1133959139143350",
+  "year": 2015,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 565500,
+  "location": "Sioux Rapids, IA",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1133959139143350",
+  "source": "Marketplace",
+  "listed": "Oct 18, 2026",
+  "dateRaw": "2026-10-18",
+  "title": "2015 cirrus sr22t"
+ },
+ {
+  "id": "2595209557657414",
+  "year": 2002,
+  "make": "Cirrus",
+  "model": "SR22",
+  "price": 205000,
+  "location": "Niceville, FL",
+  "totalTime": 2080.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2595209557657414",
+  "source": "Marketplace",
+  "listed": "Oct 18, 2026",
+  "dateRaw": "2026-10-18",
+  "title": "2002 Cirrus sr 22"
+ },
+ {
+  "id": "2399643067507266",
+  "year": 1966,
+  "make": "Cessna",
+  "model": "172",
+  "price": 137000,
+  "location": "Meridian, ID",
+  "totalTime": 5760.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2399643067507266",
+  "source": "Marketplace",
+  "listed": "Oct 18, 2026",
+  "dateRaw": "2026-10-18",
+  "title": "Cessna 172 Skyhawk"
+ },
+ {
+  "id": "28887127370940169",
+  "year": 1976,
+  "make": "Cessna",
+  "model": "182P",
+  "price": 165000,
+  "location": "County, Texas",
+  "totalTime": null,
+  "smoh": 1221.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28887127370940169/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 17, 2026",
+  "dateRaw": "2026-10-17",
+  "title": "✈️ FOR SALE: 1976 Cessna 182P Skylane — $165,000"
+ },
+ {
+  "id": "1210708575153037",
+  "year": 1952,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 60000,
+  "location": "McLoud, OK",
+  "totalTime": 4010.0,
+  "smoh": 800.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1210708575153037",
+  "source": "Marketplace",
+  "listed": "Oct 17, 2026",
+  "dateRaw": "2026-10-17",
+  "title": "1952 Beechcraft c 35 bonanza"
+ },
+ {
+  "id": "2199931124291013",
+  "year": 1958,
+  "make": "Beechcraft",
+  "model": "Bonanza",
+  "price": 69900,
+  "location": "La Grande, OR",
+  "totalTime": 2858.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2199931124291013",
+  "source": "Marketplace",
+  "listed": "Oct 17, 2026",
+  "dateRaw": "2026-10-17",
+  "title": "1958 Beechcraft J35"
+ },
+ {
+  "id": "1299064395632123",
+  "year": 1981,
+  "make": "Piper",
+  "model": "Archer",
+  "price": 180000,
+  "location": "Spring Hill, FL",
+  "totalTime": 12364.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1299064395632123",
+  "source": "Marketplace",
+  "listed": "Oct 17, 2026",
+  "dateRaw": "2026-10-17",
+  "title": "1981 PIPER ARCHER II - New Exterior Paint, New Interior, FULL GLASS GARMIN PANEL"
+ },
+ {
+  "id": "1697561151793576",
+  "year": 1964,
+  "make": "Cessna",
+  "model": "150D",
+  "price": 20000,
+  "location": "Vancouver, WA",
+  "totalTime": 4800.0,
+  "smoh": 450.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/1697561151793576",
+  "source": "Marketplace",
+  "listed": "Oct 17, 2026",
+  "dateRaw": "2026-10-17",
+  "title": "1964 Cessna 150D",
+  "isProject": true,
+  "projectNote": "Sitting ~20 yrs · out of annual · wings off"
+ },
+ {
+  "id": "29033640829565182",
+  "year": 1949,
+  "make": "Cessna",
+  "model": "170A",
+  "price": 74900,
+  "location": "La Grande, OR",
+  "totalTime": 3563.0,
+  "smoh": 556.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/29033640829565182",
+  "source": "Marketplace",
+  "listed": "Oct 16, 2026",
+  "dateRaw": "2026-10-16",
+  "title": "1949 Cessna 170A"
+ },
+ {
+  "id": "2080438182593777",
+  "year": 1975,
+  "make": "Cessna",
+  "model": "172",
+  "price": 185000,
+  "location": "Boerne, TX",
+  "totalTime": 3688.0,
+  "smoh": 1620.0,
+  "stoh": null,
+  "url": "https://www.facebook.com/marketplace/item/2080438182593777",
+  "source": "Marketplace",
+  "listed": "Oct 16, 2026",
+  "dateRaw": "2026-10-16",
+  "title": "1975 Cessna 172"
+ },
+ {
+  "id": "28872131229106450",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 179900,
+  "location": "Jackson, MS",
+  "totalTime": 4750.0,
+  "smoh": 350.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28872131229106450/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 16, 2026",
+  "dateRaw": "2026-10-16",
+  "title": "AIR POWER FACTORY OVERHAULED ENGINE- installed December 2025  EXTRA 200 for recommended overhaul!"
+ },
+ {
+  "id": "2392696388247933",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "172N",
+  "price": 129000,
+  "location": "Burlington, VT",
+  "totalTime": 10946.0,
+  "smoh": 1223.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2392696388247933/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 15, 2026",
+  "dateRaw": "2026-10-15",
+  "title": "FOR SALE: 1977 CESSNA 172N SKYHAWK"
+ },
+ {
+  "id": "28837458042573769",
+  "year": 1980,
+  "make": "Cessna",
+  "model": "340A",
+  "price": 289900,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28837458042573769/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 14, 2026",
+  "dateRaw": "2026-10-14",
+  "title": "NEW PRICE: 1980 Cessna 340A N12SB"
+ },
+ {
+  "id": "2389040291946876",
+  "year": 1966,
+  "make": "Piper",
+  "model": "Cherokee",
+  "price": 90000,
+  "location": "based at DeKalb (KDKB), and thought I’d put feelers out to s",
+  "totalTime": 5060.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2389040291946876/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 11, 2026",
+  "dateRaw": "2026-10-11",
+  "title": "**Piper Cherokee Six 260 – Potential 50/50 Co-Ownership Opportunity | KDKB, Illinois**"
+ },
+ {
+  "id": "28798306089822298",
+  "year": 1959,
+  "make": "Cessna",
+  "model": "172",
+  "price": 75000,
+  "location": "Eldon, MO",
+  "totalTime": 4812.9,
+  "smoh": 280.7,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28798306089822298/?sale_post_id=28798306089822298",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 11, 2026",
+  "dateRaw": "2026-10-11",
+  "title": "1959 Cessna  172"
+ },
+ {
+  "id": "2387730202077885",
+  "year": 1967,
+  "make": "Cessna",
+  "model": "310P",
+  "price": 209000,
+  "location": "Zephyrhills, FL",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2387730202077885/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 10, 2026",
+  "dateRaw": "2026-10-10",
+  "title": "✈️ FOR SALE | 1967 CESSNA 310P ✈️"
+ },
+ {
+  "id": "28770129192639988",
+  "year": 2000,
+  "make": "Cessna",
+  "model": "172S",
+  "price": 314900,
+  "location": "Lexington, Kentucky",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28770129192639988/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 9, 2026",
+  "dateRaw": "2026-10-09",
+  "title": "NEW LISTING: 2000 Cessna 172S Skyhawk SP N669PD"
+ },
+ {
+  "id": "28768474092805498",
+  "year": 2024,
+  "make": "Piper",
+  "model": "M350",
+  "price": 1699900,
+  "location": "based at KEIK ",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28768474092805498/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 9, 2026",
+  "dateRaw": "2026-10-09",
+  "title": "2024 Piper M350"
+ },
+ {
+  "id": "2385881072262798",
+  "year": 1965,
+  "make": "Piper",
+  "model": "Pa-32",
+  "price": 155000,
+  "location": "Location not listed",
+  "totalTime": 3268.0,
+  "smoh": 748.0,
+  "stoh": 252.0,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2385881072262798/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 8, 2026",
+  "dateRaw": "2026-10-08",
+  "title": "1965 Piper PA-32-260 Cherokee six for sale"
+ },
+ {
+  "id": "28750130841306490",
+  "year": 1985,
+  "make": "Piper",
+  "model": "Malibu",
+  "price": 369000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": 1342.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28750130841306490/?sale_post_id=28750130841306490",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 8, 2026",
+  "dateRaw": "2026-10-08",
+  "title": "1985 Piper Malibu"
+ },
+ {
+  "id": "28739969762322598",
+  "year": 1954,
+  "make": "Cessna",
+  "model": "180",
+  "price": 53500,
+  "location": "based at Tacoma Narrows (KTIW)",
+  "totalTime": 3317.4,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28739969762322598/?sale_post_id=28739969762322598",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 7, 2026",
+  "dateRaw": "2026-10-07",
+  "title": "1954 Cessna 180"
+ },
+ {
+  "id": "28739242335728674",
+  "year": 1980,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 250000,
+  "location": "Location not listed",
+  "totalTime": 2652.5,
+  "smoh": 815.2,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28739242335728674/?sale_post_id=28739242335728674",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 7, 2026",
+  "dateRaw": "2026-10-07",
+  "title": "(SOLD) 1980 Piper arrow turbo"
+ },
+ {
+  "id": "28727631900223051",
+  "year": 1968,
+  "make": "Cessna",
+  "model": "150H",
+  "price": 63000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": 1259.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28727631900223051/?sale_post_id=28727631900223051",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 6, 2026",
+  "dateRaw": "2026-10-06",
+  "title": "1968 Cessna 150h"
+ },
+ {
+  "id": "2382435262607379",
+  "year": 2009,
+  "make": "Cessna",
+  "model": "182T",
+  "price": 458500,
+  "location": "Location not listed",
+  "totalTime": 4098.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2382435262607379/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 4, 2026",
+  "dateRaw": "2026-10-04",
+  "title": "**$458,500** **USD OBO!!!**"
+ },
+ {
+  "id": "2381429962707909",
+  "year": 1979,
+  "make": "Cessna",
+  "model": "U206G",
+  "price": 330000,
+  "location": "Location not listed",
+  "totalTime": 1571.0,
+  "smoh": 167.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2381429962707909/",
+  "source": "Aircraft Marketplace",
+  "listed": "Oct 3, 2026",
+  "dateRaw": "2026-10-03",
+  "title": "Single Owner, Motivated Seller, Preserved 1979 Cessna U206G Stationair | N1723B"
+ },
+ {
+  "id": "28663901223262786",
+  "year": 1977,
+  "make": "Piper",
+  "model": "Archer",
+  "price": 169900,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28663901223262786/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Oct 1, 2026",
+  "dateRaw": "2026-10-01",
+  "title": "FRESH ANNUAL! 1977 Piper Archer II N38434"
+ },
+ {
+  "id": "2377308129786759",
+  "year": 1973,
+  "make": "Cessna",
+  "model": "172M",
+  "price": 130000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2377308129786759/",
+  "source": "Aircraft Marketplace",
+  "listed": "Sep 29, 2026",
+  "dateRaw": "2026-09-29",
+  "title": "✈️ For Sale!!  1973 CESSNA 172M — N921AA"
+ },
+ {
+  "id": "2360137464837159",
+  "year": 1963,
+  "make": "Cessna",
+  "model": "182",
+  "price": 165000,
+  "location": "Location not listed",
+  "totalTime": 910.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2360137464837159/",
+  "source": "Aircraft Marketplace",
+  "listed": "Sep 12, 2026",
+  "dateRaw": "2026-09-12",
+  "title": "For Sale!"
+ },
+ {
+  "id": "28237119722607607",
+  "year": 1953,
+  "make": "Piper",
+  "model": "Pacer",
+  "price": 45000,
+  "location": "Campbellsville, KY",
+  "totalTime": 2500.0,
+  "smoh": 900.0,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28237119722607607/?sale_post_id=28237119722607607",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 30, 2026",
+  "dateRaw": "2026-08-30",
+  "title": "1953 Piper pacer"
+ },
+ {
+  "id": "28215276444791935",
+  "year": 1978,
+  "make": "Piper",
+  "model": "Seneca",
+  "price": 119900,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28215276444791935/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 28, 2026",
+  "dateRaw": "2026-08-28",
+  "title": "NEW LISTING: 1978 Piper Seneca II N63AH"
+ },
+ {
+  "id": "28197191903267056",
+  "year": 1965,
+  "make": "Piper",
+  "model": "Cherokee 140",
+  "price": 57500,
+  "location": "Location not listed",
+  "totalTime": 6126.0,
+  "smoh": 2476.0,
+  "stoh": 2554.9,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28197191903267056/?sale_post_id=28197191903267056",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 27, 2026",
+  "dateRaw": "2026-08-27",
+  "title": "Piper PA-28-140/160 Cherokee"
+ },
+ {
+  "id": "2343094253208147",
+  "year": 1977,
+  "make": "Cessna",
+  "model": "182Q",
+  "price": 224999,
+  "location": "Airpark, Washington",
+  "totalTime": 3544.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2343094253208147/",
+  "source": "Aircraft Marketplace",
+  "listed": "Aug 24, 2026",
+  "dateRaw": "2026-08-24",
+  "title": "1977 CESSNA 182Q SKYLANE"
+ },
+ {
+  "id": "28149410741378506",
+  "year": 1961,
+  "make": "Piper",
+  "model": "Comanche",
+  "price": 120000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": 687.2,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28149410741378506/?sale_post_id=28149410741378506",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 23, 2026",
+  "dateRaw": "2026-08-23",
+  "title": "1961 Piper Comanche pa -24-250 (260)"
+ },
+ {
+  "id": "2341162096734696",
+  "year": 1972,
+  "make": "Cessna",
+  "model": "150L",
+  "price": 69700,
+  "location": "Concord, California",
+  "totalTime": 7516.5,
+  "smoh": 552.5,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2341162096734696/",
+  "source": "Aircraft Marketplace",
+  "listed": "Aug 22, 2026",
+  "dateRaw": "2026-08-22",
+  "title": "Modernized Cessna 150L with upgraded avionics and fresh interior improvements. Recent annual inspection July 2026. This aircraft combines the economy and reliability of a classic 1"
+ },
+ {
+  "id": "28138503579135889",
+  "year": 1963,
+  "make": "Piper",
+  "model": "PA-22",
+  "price": 35000,
+  "location": "Eagle River, AK",
+  "totalTime": 3076.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28138503579135889/?sale_post_id=28138503579135889",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 22, 2026",
+  "dateRaw": "2026-08-22",
+  "title": "Piper PA-22/20 - PENDING"
+ },
+ {
+  "id": "2338400103677562",
+  "year": null,
+  "make": "Piper",
+  "model": "Cherokee 180",
+  "price": 90000,
+  "location": "KHBI",
+  "totalTime": 3800.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2338400103677562/",
+  "source": "Aircraft Marketplace",
+  "listed": "Aug 19, 2026",
+  "dateRaw": "2026-08-19",
+  "title": "Here is a great opportunity to own a classic Piper Cherokee 180 with a low-time engine and propeller, both with approximately 550 hours since overhaul. The airframe has approximate"
+ },
+ {
+  "id": "2336391960545043",
+  "year": 1967,
+  "make": "Piper",
+  "model": "Arrow",
+  "price": 115000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/1215732559277661/permalink/2336391960545043/",
+  "source": "Aircraft Marketplace",
+  "listed": "Aug 17, 2026",
+  "dateRaw": "2026-08-17",
+  "title": "*$115,000* 1967 Piper Arrow"
+ },
+ {
+  "id": "28035653902754191",
+  "year": 1962,
+  "make": "Piper",
+  "model": "PA-28-160",
+  "price": 79000,
+  "location": "KFZG",
+  "totalTime": 5260.0,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/28035653902754191/?sale_post_id=28035653902754191",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 14, 2026",
+  "dateRaw": "2026-08-14",
+  "title": "1962 PA-28 Piper 160"
+ },
+ {
+  "id": "27988054264180822",
+  "year": 1980,
+  "make": "Piper",
+  "model": "Dakota",
+  "price": 250000,
+  "location": "Location not listed",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/27988054264180822/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 10, 2026",
+  "dateRaw": "2026-08-10",
+  "title": "NEW LISTING: 1980 Piper Dakota N8106P"
+ },
+ {
+  "id": "27977287931924122",
+  "year": 1980,
+  "make": "Piper",
+  "model": "PA-28",
+  "price": 170000,
+  "location": "Elk City, OK",
+  "totalTime": 1827.0,
+  "smoh": 1827.0,
+  "stoh": 455.0,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/27977287931924122/?sale_post_id=27977287931924122",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 9, 2026",
+  "dateRaw": "2026-08-09",
+  "title": "1980 Piper pa-28 dakota 236"
+ },
+ {
+  "id": "27937278805925035",
+  "year": 1978,
+  "make": "Piper",
+  "model": "Lance",
+  "price": 249900,
+  "location": "Dublin, Virginia",
+  "totalTime": null,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/Aircraft.for.sale/permalink/27937278805925035/",
+  "source": "AIRCRAFT FOR SALE or BUY.",
+  "listed": "Aug 6, 2026",
+  "dateRaw": "2026-08-06",
+  "title": "NEW LISTING: 1978 Piper Turbo Lance N36716"
+ },
+ {
+  "id": "1393033135875185",
+  "year": null,
+  "make": "Cessna",
+  "model": "182J",
+  "price": 108000,
+  "location": "Leesburg, Virginia",
+  "totalTime": 6755.77,
+  "smoh": null,
+  "stoh": null,
+  "url": "https://facebook.com/groups/871396391372198/permalink/1393033135875185/",
+  "source": "Cessna 172 182 206 All Cessna Models FSBO No Brokers Please",
+  "listed": "Dec 14, 2025",
+  "dateRaw": "2025-12-14",
+  "title": "***Cessna Skylane 182J STOL FOR SALE***"
+ }
+];
+
+const groupsEl = document.getElementById('groups');
+const emptyEl = document.getElementById('empty');
+const qEl = document.getElementById('q');
+const sortEl = document.getElementById('sort');
+let activeFilter = 'all';
+let activeSource = 'all';
+const MAKES = ['Cessna','Piper','Beechcraft','Cirrus','Mooney','Diamond','Vans','Rockwell','Grumman','Luscombe'];
+function sourceType(it){
+  if(it.source==='Marketplace') return 'marketplace';
+  if(/trade-a-plane/i.test(it.source)) return 'tap';
+  if(/controller/i.test(it.source)) return 'controller';
+  if(/barnstormers/i.test(it.source)) return 'barnstormers';
+  if(/globalair/i.test(it.source)) return 'globalair';
+  return 'facebook';
+}
+function sourceLabel(it){
+  return sourceType(it)==='marketplace' ? 'Facebook Marketplace' : it.source;
+}
+function isSold(it){ return /sold/i.test(it.title||''); }
+function isShare(it){ return it.listingType==='share' || it.listingType==='partnership'; }
+function isProject(it){ return !!it.isProject; }
+function isAuction(it){ return !!it.isAuction; }
+function shareLabel(it){
+  if(it.shareFraction) return it.shareFraction + (it.listingType==='partnership' ? ' partnership' : ' share');
+  return it.listingType==='partnership' ? 'Partnership' : 'Share';
+}
+function synopsis(it){
+  // Own-words synopsis built only from structured facts.
+  const bits = [];
+  bits.push((it.year ? it.year + ' ' : '') + it.make + ' ' + it.model + ' tracked via ' + sourceLabel(it) + ', listed ' + it.listed + '.');
+  if(it.price!=null) bits.push(isAuction(it) ? 'Starting bid ' + money(it.price) + ' — this is an auction, not a buy-it-now price.' + (it.auctionEnds ? ' Auction ends ' + it.auctionEnds + '.' : '') : 'Asking ' + money(it.price) + '.');
+  if(isShare(it)) bits.push(it.shareFraction
+    ? 'That price is the buy-in for a ' + it.shareFraction + ' share — you own the aircraft together with the other partners, not the whole aircraft.'
+    : 'This is a partnership opportunity — the seller is looking for a partner to buy in, not selling the whole aircraft.');
+  if(isProject(it)) bits.push('Project aircraft — not a fly-away airplane' + (it.projectNote ? ' (' + it.projectNote.toLowerCase() + ')' : '') + '.');
+  const hrs = [];
+  if(it.totalTime!=null) hrs.push(fmtHours(it.totalTime) + ' TT');
+  if(it.smoh!=null) hrs.push(fmtHours(it.smoh) + ' SMOH');
+  if(it.stoh!=null) hrs.push(fmtHours(it.stoh) + ' STOH');
+  bits.push(hrs.length ? 'Hours as listed: ' + hrs.join(' · ') + '.' : 'Seller did not list total or engine time.');
+  if(it.location && it.location!=='Location not listed') bits.push('Located: ' + it.location + '.');
+  if(isSold(it)) bits.push('Seller marked this one SOLD in the listing title.');
+  return bits.join(' ');
+}
+
+function money(n){ return n==null ? '—' : '$' + n.toLocaleString('en-US'); }
+function fmtHours(n){ if(n==null) return '—'; return n.toLocaleString('en-US',{maximumFractionDigits:1}); }
+function hoursLabel(n, suffix){ if(n==null) return '—'; return fmtHours(n) + ' ' + suffix; }
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function statsFor(list){
+  const priced = list.filter(x=>x.price!=null).map(x=>x.price);
+  if(!priced.length) return {low:null,high:null,avg:null,count:list.length,priced:0};
+  return { low:Math.min(...priced), high:Math.max(...priced), avg:Math.round(priced.reduce((a,b)=>a+b,0)/priced.length), count:list.length, priced:priced.length };
+}
+
+function filtered(){
+  const q = qEl.value.trim().toLowerCase();
+  let list = LISTINGS.slice();
+  if(MAKES.includes(activeFilter)) list = list.filter(x=>x.make===activeFilter);
+  if(activeFilter==='priced') list = list.filter(x=>x.price!=null);
+  if(activeSource!=='all') list = list.filter(x=>sourceType(x)===activeSource);
+  if(q) list = list.filter(x => {
+    const hay = [x.year,x.make,x.model,x.location, hoursLabel(x.totalTime,'TT'), x.title, x.source, x.listed].join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+  if(sortEl.value==='priceAsc') list.sort((a,b)=>(a.price??Infinity)-(b.price??Infinity));
+  if(sortEl.value==='priceDesc') list.sort((a,b)=>(b.price??-1)-(a.price??-1));
+  if(sortEl.value==='smohAsc') list.sort((a,b)=>(a.smoh??Infinity)-(b.smoh??Infinity));
+  if(sortEl.value==='stohAsc') list.sort((a,b)=>(a.stoh??Infinity)-(b.stoh??Infinity));
+  if(sortEl.value==='newest') list.sort((a,b)=> (b.dateRaw||'').localeCompare(a.dateRaw||''));
+  return list;
+}
+
+function cardHtml(it){
+  const totalSub = it.totalTime!=null ? 'Total time' : 'Not listed';
+  const smohSub = it.smoh!=null ? 'Since major overhaul' : 'Not listed';
+  const stohSub = it.stoh!=null ? 'Since top overhaul' : 'Not listed';
+  const loc = it.location ? esc(it.location) : 'Location not listed';
+  const priceNote = isAuction(it) ? 'starting bid' : (isShare(it) ? (it.shareFraction ? 'for a ' + esc(it.shareFraction) + ' share' : 'partnership buy-in') : 'asking');
+  return `<article class="card">
+    <div class="card-top"><span class="year">${it.year ? it.year : 'Year —'}${isSold(it) ? ' · SOLD' : ''}</span><span class="source-badge">Source: ${esc(sourceLabel(it))}</span></div>
+    <h3>${it.year ? it.year+' ' : ''}${esc(it.make)} ${esc(it.model)}</h3>
+    ${isShare(it) ? '<div><span class="share-badge">' + esc(shareLabel(it)) + '</span></div>' : ''}
+    ${isProject(it) ? '<div><span class="project-badge">Project' + (it.projectNote ? '<span class="reason"> — ' + esc(it.projectNote) + '</span>' : '') + '</span></div>' : ''}
+    ${isAuction(it) ? '<div><span class="auction-badge">Auction' + (it.auctionEnds ? '<span class="reason"> — Ends ' + esc(it.auctionEnds) + '</span>' : '') + '</span></div>' : ''}
+    <div class="loc">📍 ${loc} &nbsp;·&nbsp; Listed ${esc(it.listed)}</div>
+    <div class="price"><b>${it.price!=null ? money(it.price) : 'Price not listed'}</b>${it.price!=null ? '<span>' + priceNote + '</span>' : ''}</div>
+    <div class="specs">
+      <div class="spec"><small>Total time</small><b class="mono">${hoursLabel(it.totalTime,'TT')}</b><p>${totalSub}</p></div>
+      <div class="spec"><small>SMOH</small><b class="mono">${hoursLabel(it.smoh,'SMOH')}</b><p>${smohSub}</p></div>
+      <div class="spec"><small>STOH</small><b class="mono">${hoursLabel(it.stoh,'STOH')}</b><p>${stohSub}</p></div>
+    </div>
+    <p class="notes"><strong style="color:var(--ink)">Synopsis:</strong> ${esc(synopsis(it))}</p>
+    <div class="card-foot">
+      <a class="btn btn-primary" href="${esc(it.url)}" target="_blank" rel="noopener">View original listing →</a>
+      <button class="btn btn-ghost" onclick="this.textContent = this.textContent==='Watching ✓' ? '☆ Watch' : 'Watching ✓'">☆ Watch</button>
+    </div>
+    <div class="idline"><span>ID ${esc(it.id)}</span><span>DEDUPED · 1 RECORD</span></div>
+  </article>`;
+}
+
+function render(){
+  const list = filtered();
+  document.getElementById('kpiCount').textContent = LISTINGS.length;
+  emptyEl.classList.toggle('show', list.length===0);
+  const whole = list.filter(it=>!isShare(it));
+  const shares = list.filter(isShare);
+  const map = new Map();
+  whole.forEach(item=>{
+    const key = item.make + '|' + item.model;
+    if(!map.has(key)) map.set(key, []);
+    map.get(key).push(item);
+  });
+  let entries = Array.from(map.entries());
+  if(sortEl.value==='group'){
+    entries.sort((a,b)=> a[0].localeCompare(b[0]));
+  }
+  let html='';
+  entries.forEach(([key, items])=>{
+    const [make,model]=key.split('|');
+    const s=statsFor(items);
+    html += `<section class="group" aria-label="${esc(make)} ${esc(model)}">
+      <div class="group-head">
+        <div><h2>${esc(make)} <em>${esc(model)}</em></h2><p>${s.count} listing${s.count!==1?'s':''} tracked · ${s.priced} priced · deduplicated</p></div>
+        <div class="stats">
+          <div class="stat"><small>Low</small><b>${money(s.low)}</b></div>
+          <div class="stat avg"><small>Average</small><b>${money(s.avg)}</b></div>
+          <div class="stat"><small>High</small><b>${money(s.high)}</b></div>
+        </div>
+      </div>
+      <div class="cards">`;
+    items.forEach(it=>{ html += cardHtml(it); });
+    html += `</div></section>`;
+  });
+  if(shares.length){
+    html += `<section class="group" aria-label="Shares and partnerships">
+      <div class="group-head">
+        <div><h2>Shares &amp; <em>partnerships</em></h2><p>${shares.length} listing${shares.length!==1?'s':''} · fractional shares and partnership buy-ins — the price is for the share, not the whole aircraft</p></div>
+      </div>
+      <div class="cards">`;
+    shares.forEach(it=>{ html += cardHtml(it); });
+    html += `</div></section>`;
+  }
+  groupsEl.innerHTML = html;
+}
+document.getElementById('chips').addEventListener('click', e=>{
+  const btn = e.target.closest('.chip'); if(!btn) return;
+  document.querySelectorAll('#chips .chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active'); activeFilter = btn.dataset.filter; render();
+});
+document.getElementById('sourceChips').addEventListener('click', e=>{
+  const btn = e.target.closest('.chip'); if(!btn) return;
+  document.querySelectorAll('#sourceChips .chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active'); activeSource = btn.dataset.source;
+  if(activeSource!=='all' && activeSource!=='facebook' && activeSource!=='marketplace'){
+    emptyEl.innerHTML = '<strong style="color:var(--ink)">No listings from this source yet.</strong><br>Cards appear here as listings from this source are tracked.';
+  } else {
+    emptyEl.innerHTML = '<strong style="color:var(--ink)">No listings match that filter.</strong><br>Try clearing the search or picking “All makes”.';
+  }
+  render();
+});
+qEl.addEventListener('input', render);
+sortEl.addEventListener('change', render);
+// Newsletter signup: opens the reader's mail app — no fake subscribe.
+document.getElementById('signupForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const email = document.getElementById('signupEmail').value.trim();
+  if(!email) return;
+  const subject = encodeURIComponent('Subscribe — The Aircraft Market');
+  const body = encodeURIComponent('Please add ' + email + ' to The Aircraft Market email list.');
+  document.getElementById('signupHelp').textContent = 'Your email app should now open with a pre-filled subscribe message for ' + email + ' — press Send there to finish. If nothing opened, your device has no mail app set up.';
+  const a = document.createElement('a');
+  a.href = 'mailto:?subject=' + subject + '&body=' + body;
+  document.body.appendChild(a); a.click(); a.remove();
+});
+render();
+</script>
+</body>
+</html>
