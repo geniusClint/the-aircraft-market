@@ -167,12 +167,7 @@
       <div>
         <h2>The Aircraft <em>Market</em></h2>
         <p><strong style="color:var(--ink)">Keep up to date with what planes are on the market, and the ones that have sold or left the market — everything in one place.</strong> No hype: just the numbers from tracking the market every day, with a link out to the original source for anything you want to chase.</p>
-        <form class="signup" id="signupForm">
-          <label class="sr" for="signupEmail">Email address</label>
-          <input id="signupEmail" type="email" required placeholder="you@example.com" autocomplete="email">
-          <button type="submit">Subscribe →</button>
-        </form>
-        <p id="signupHelp" style="font-size:13px;margin-top:8px">This opens your email app with a pre-filled “subscribe” message — just press Send there. Nothing is subscribed until you send it.</p>
+        <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="c81ac6f8-1b03-420e-84aa-be32db262003"></script>
       </div>
       <aside class="issue" aria-label="Issue 1 preview">
         <small>Preview · Issue #1 — from the Nov 17 scan</small>
@@ -13137,19 +13132,8 @@ document.getElementById('sourceChips').addEventListener('click', e=>{
 });
 qEl.addEventListener('input', render);
 sortEl.addEventListener('change', render);
-// Newsletter signup: opens the reader's mail app — no fake subscribe.
-document.getElementById('signupForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const email = document.getElementById('signupEmail').value.trim();
-  if(!email) return;
-  const subject = encodeURIComponent('Subscribe — The Aircraft Market');
-  const body = encodeURIComponent('Please add ' + email + ' to The Aircraft Market email list.');
-  document.getElementById('signupHelp').textContent = 'Your email app should now open with a pre-filled subscribe message for ' + email + ' — press Send there to finish. If nothing opened, your device has no mail app set up.';
-  const a = document.createElement('a');
-  a.href = 'mailto:?subject=' + subject + '&body=' + body;
-  document.body.appendChild(a); a.click(); a.remove();
-});
 render();
 </script>
+<script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
 </body>
 </html>
