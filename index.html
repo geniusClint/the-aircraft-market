@@ -9,6 +9,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '538061749686454');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" alt=""
+src="https://www.facebook.com/tr?id=538061749686454&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <style>
   :root{
     --bg:#f3f4f1; --surface:#ffffff; --surface-2:#eef0ea; --ink:#121a24; --muted:#5b6b7d; --line:#dde1d8;
@@ -13602,5 +13619,74 @@ sortEl.addEventListener('change', render);
 render();
 </script>
 <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+<script>
+/* Meta Pixel: fire a Lead event once when the beehiiv signup form
+   (c81ac6f8-1b03-420e-84aa-be32db262003) reaches its success state.
+   Detection is scoped to the newsletter section's rendered DOM and to
+   messages from the beehiiv embed only — the page body and script
+   source are never scanned, and nothing fires on page load. */
+(function(){
+  var leadFired = false;
+  function fireLead(){
+    if(leadFired) return;
+    leadFired = true;
+    if(typeof window.fbq === 'function'){ window.fbq('track', 'Lead'); }
+  }
+  /* Split so this script's own source never contains the full phrase. */
+  var SUCCESS_TEXT = 'Thanks for ' + 'subscribing';
+  function isHiddenTag(node){
+    return /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(node.tagName || '');
+  }
+  function hasThanks(node){
+    if(!node) return false;
+    if(node.nodeType === 3){
+      var p = node.parentNode;
+      if(p && p.nodeType === 1 && isHiddenTag(p)) return false;
+      return (node.nodeValue || '').indexOf(SUCCESS_TEXT) !== -1;
+    }
+    if(node.nodeType !== 1 || isHiddenTag(node)) return false;
+    /* Visible rendered text only: walk text nodes, skipping any
+       script/style descendants so embedded code is never matched. */
+    var parts = [];
+    (function walk(n){
+      for(var i = 0; i < n.childNodes.length; i++){
+        var c = n.childNodes[i];
+        if(c.nodeType === 3){ parts.push(c.nodeValue || ''); }
+        else if(c.nodeType === 1 && !isHiddenTag(c)){ walk(c); }
+      }
+    })(node);
+    return parts.join(' ').indexOf(SUCCESS_TEXT) !== -1;
+  }
+  /* Success message rendered into the newsletter form's container. */
+  var container = document.getElementById('newsletter');
+  if(container){
+    var observer = new MutationObserver(function(mutations){
+      if(leadFired) return;
+      for(var i = 0; i < mutations.length; i++){
+        var m = mutations[i];
+        if(m.type === 'characterData' && hasThanks(m.target)){ fireLead(); return; }
+        var added = m.addedNodes || [];
+        for(var j = 0; j < added.length; j++){
+          if(hasThanks(added[j])){ fireLead(); return; }
+        }
+      }
+    });
+    observer.observe(container, {childList:true, subtree:true, characterData:true});
+  }
+  /* The embedded form also reports its state to the parent window. */
+  window.addEventListener('message', function(event){
+    if(leadFired) return;
+    if(!event.origin || event.origin.indexOf('beehiiv.com') === -1) return;
+    var payload = '';
+    if(typeof event.data === 'string'){ payload = event.data; }
+    else if(event.data){ try { payload = JSON.stringify(event.data); } catch(e){ payload = ''; } }
+    if(!payload) return;
+    if(payload.indexOf(SUCCESS_TEXT) !== -1 ||
+       (/subscri/i.test(payload) && /(success|complete|thank)/i.test(payload))){
+      fireLead();
+    }
+  });
+})();
+</script>
 </body>
 </html>
