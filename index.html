@@ -43,7 +43,9 @@
   .digest label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;font-weight:700}
   .digest strong{display:block;font-size:18px;margin:4px 0 2px}
   .digest p{font-size:13.5px;color:#dbe6f2;margin:0}
-  .digest .pill{display:inline-block;margin-top:10px;background:#f5b04a;color:#1a1200;font-weight:700;font-size:12.5px;padding:6px 10px;border-radius:999px}
+  .digest .pill{display:inline-block;margin-top:10px;background:#f5b04a;color:#1a1200;font-weight:700;font-size:12.5px;padding:6px 10px;border-radius:999px;text-decoration:none;cursor:pointer}
+  #newsletter{scroll-margin-top:16px}
+  @media (prefers-reduced-motion: no-preference){ html{scroll-behavior:smooth} }
   /* KPIs */
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
   @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
@@ -157,7 +159,7 @@
         <label>The Aircraft Market — email</label>
         <strong>Subscribe to stay informed</strong>
         <p>Keep up to date with what planes are on the market, and the ones that have sold or left the market — everything in one place.</p>
-        <span class="pill">Free to subscribe</span>
+        <a class="pill" href="#newsletter">Free to subscribe</a>
       </div>
     </div>
   </section>
