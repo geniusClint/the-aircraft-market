@@ -120,8 +120,8 @@ src="https://www.facebook.com/tr?id=538061749686454&ev=PageView&noscript=1"
   .price{margin:14px 0 12px;display:flex;align-items:baseline;gap:8px}
   .price b{font-size:30px;letter-spacing:-.03em;line-height:1}
   .price span{color:var(--muted);font-size:13px}
-  .specs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
-  @media(max-width:480px){.specs{grid-template-columns:1fr 1fr 1fr;gap:6px}.spec{padding:8px 7px}.spec b.mono{font-size:12.5px}}
+  .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;margin-bottom:12px}
+  @media(max-width:480px){.specs{grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:6px}.spec{padding:8px 7px}.spec b.mono{font-size:12.5px}}
   .spec{background:var(--surface-2);border-radius:10px;padding:10px}
   .spec small{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
   .spec b{display:block;margin-top:3px;font-size:15px;line-height:1.2}
@@ -293,8 +293,8 @@ const LISTINGS = [
   "model": "M20J",
   "price": 79900,
   "location": "Kokomo, IN",
-  "totalTime": null,
-  "smoh": null,
+  "totalTime": 5639.1,
+  "smoh": 1365.1,
   "stoh": null,
   "url": "https://aircraftownershipsolutions.com/product/1977-mooney-m20j/",
   "source": "Aircraft Ownership Solutions",
@@ -14460,7 +14460,7 @@ function filtered(){
 function cardHtml(it){
   const totalSub = it.totalTime!=null ? 'Total time' : 'Not listed';
   const smohSub = it.smoh!=null ? 'Since major overhaul' : 'Not listed';
-  const stohSub = it.stoh!=null ? 'Since top overhaul' : 'Not listed';
+  const stohSpec = it.stoh!=null ? '<div class="spec"><small>STOH</small><b class="mono">' + hoursLabel(it.stoh,'STOH') + '</b><p>Since top overhaul</p></div>' : '';
   const loc = it.location ? esc(it.location) : 'Location not listed';
   const priceNote = isAuction(it) ? 'starting bid' : (isShare(it) ? (it.shareFraction ? 'for a ' + esc(it.shareFraction) + ' share' : 'partnership buy-in') : 'asking');
   return `<article class="card">
@@ -14474,7 +14474,7 @@ function cardHtml(it){
     <div class="specs">
       <div class="spec"><small>Total time</small><b class="mono">${hoursLabel(it.totalTime,'TT')}</b><p>${totalSub}</p></div>
       <div class="spec"><small>SMOH</small><b class="mono">${hoursLabel(it.smoh,'SMOH')}</b><p>${smohSub}</p></div>
-      <div class="spec"><small>STOH</small><b class="mono">${hoursLabel(it.stoh,'STOH')}</b><p>${stohSub}</p></div>
+      ${stohSpec}
     </div>
     <p class="notes"><strong style="color:var(--ink)">Synopsis:</strong> ${esc(synopsis(it))}</p>
     <div class="card-foot">
