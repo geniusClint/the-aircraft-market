@@ -17644,7 +17644,8 @@ render();
 </script>
 <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
 <script>
-/* Meta Pixel: fire a Lead event once when the beehiiv signup form
+/* Meta Pixel + TikTok Pixel: fire a Lead event (Meta) and a
+   CompleteRegistration event (TikTok) once when the beehiiv signup form
    (c81ac6f8-1b03-420e-84aa-be32db262003) reaches its success state.
    Detection is scoped to the newsletter section's rendered DOM and to
    messages from the beehiiv embed only — the page body and script
@@ -17655,6 +17656,7 @@ render();
     if(leadFired) return;
     leadFired = true;
     if(typeof window.fbq === 'function'){ window.fbq('track', 'Lead'); }
+    if(window.ttq && typeof window.ttq.track === 'function'){ window.ttq.track('CompleteRegistration'); }
   }
   /* Split so this script's own source never contains the full phrase. */
   var SUCCESS_TEXT = 'Thanks for ' + 'subscribing';
